@@ -4,12 +4,11 @@ import { Navbar, NavItem } from 'react-materialize';
 export default function NavBar() {
     return (
         <div>
-            <Navbar brand={<a />} centerLogo alignLinks="left">
-                <NavItem >
+            <Navbar brand={<a href='https://github.com/vpvnguyen/google-books-react' target='_blank' rel="noopener noreferrer">Google Books</a>} centerLogo alignLinks="left">
+                <NavItem href='/'>
                     Search
                 </NavItem>
-                <NavItem divider />
-                <NavItem href="#">
+                <NavItem href="/saved">
                     Save
                 </NavItem>
             </Navbar>
