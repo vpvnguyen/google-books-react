@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { TextInput, Button, Icon } from 'react-materialize';
 
 // api
-import API from "../../utils/API";
+import axios from 'axios';
 
 export default class SearchBar extends Component {
 
@@ -12,17 +12,20 @@ export default class SearchBar extends Component {
         isSearched: false,
     }
 
+    // user input
     handleChange = event => {
         this.setState({ searchInput: event.target.value });
     }
 
+    // get google books api
     getBooks = event => {
         event.preventDefault();
 
         const searchInput = this.state.searchInput.trim();
         console.log(`Search Input: ${searchInput}`);
 
-        API.getNewBooks(searchInput)
+        // get books from google api
+        axios.get(`https://www.googleapis.com/books/v1/volumes?q=${searchInput}`)
             .then(res => {
                 this.setState({ searchResults: res.data.items })
                 console.log(this.state.searchResults);
