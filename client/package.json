@@ -1,9 +1,9 @@
 {
-  "name": "mern",
+  "name": "google-books-react",
   "version": "0.1.0",
-  "description": "Mern Demo",
+  "description": "Google Books React Web Client",
   "private": true,
-  "proxy": "http://localhost:3001/",
+  "proxy": "http://localhost:3001",
   "dependencies": {
     "bootstrap": "^4.3.1",
     "react": "^16.6.3",
