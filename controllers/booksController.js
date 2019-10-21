@@ -44,6 +44,18 @@ router.get('/getSavedBooks/', (req, res) => {
             console.log(err);
             res.sendStatus(500);
         });
+});
+
+router.delete('/deleteBook/:id', (req, res) => {
+    // console.log(req.params.id);
+    Book.findByIdAndRemove(req.params.id)
+        .then((deletedBookResponse) => {
+            res.send(deletedBookResponse)
+        })
+        .catch(err => {
+            console.log(err)
+            res.sendStatus(500);
+        })
 })
 
 module.exports = router;
