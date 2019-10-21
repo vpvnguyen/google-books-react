@@ -15,8 +15,8 @@ export default {
         return axios.get('/getSavedBooks/');
     },
     // delete book from mongodb
-    deleteBook: function (bookID) {
-        return axios.delete(`/api/books/${bookID}`);
+    deleteBookByID: function (bookID) {
+        return axios.delete(`/deleteBook/${bookID}`);
     },
 
 };
