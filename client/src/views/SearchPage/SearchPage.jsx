@@ -82,41 +82,38 @@ export default class SearchPage extends Component {
                             {/* map through array of objects and create card */}
                             {
                                 this.state.searchResults.map(book => (
-                                    <form>
-                                        <Card className="container"
-                                            key={'card_' + book.id}
-                                            actions={
-                                                [
-                                                    <Button key={'view_' + book.id}><a href={book.volumeInfo.infoLink} target="_blank" rel="noopener noreferrer">View</a></Button>,
-                                                    <Button
-                                                        key={'save_' + book.id}
-                                                        data-id={book.id}
-                                                        data-title={book.volumeInfo.title}
-                                                        data-author={book.volumeInfo.authors[0]}
-                                                        data-imglink={book.volumeInfo.imageLinks.smallThumbnail ? book.volumeInfo.imageLinks.smallThumbnail : ''}
-                                                        data-rating={book.volumeInfo.averageRating ? book.volumeInfo.averageRating : ''}
-                                                        data-description={book.volumeInfo.description}
-                                                        data-infolink={book.volumeInfo.infoLink}
-                                                        onClick={this.saveBook}
-                                                    > Save</Button >
+                                    <Card className="container"
+                                        key={`result-card-${book._id}`}
+                                        actions={
+                                            [
+                                                <Button key={`result-view-${book._id}`}><a href={book.volumeInfo.infoLink} target="_blank" rel="noopener noreferrer">View</a></Button>,
+                                                <Button
+                                                    key={`result-save-${book._id}`}
+                                                    data-id={book.id}
+                                                    data-title={book.volumeInfo.title}
+                                                    data-author={book.volumeInfo.authors[0]}
+                                                    data-imglink={book.volumeInfo.imageLinks.smallThumbnail ? book.volumeInfo.imageLinks.smallThumbnail : ''}
+                                                    data-rating={book.volumeInfo.averageRating ? book.volumeInfo.averageRating : ''}
+                                                    data-description={book.volumeInfo.description}
+                                                    data-infolink={book.volumeInfo.infoLink}
+                                                    onClick={this.saveBook}
+                                                > Save</Button >
 
-                                                ]
-                                            }
-                                        >
-                                            <div className="row">
-                                                <div className="col-md-3">
-                                                    <img src={book.volumeInfo.imageLinks.smallThumbnail} alt="" className="imgclass" />
-                                                </div>
-                                                <div className="col-md-9">
-                                                    <h6>{book.volumeInfo.title}</h6>
-                                                    <p>Author: {book.volumeInfo.authors[0]}</p>
-                                                    <p>Rating: {book.volumeInfo.averageRating ? book.volumeInfo.averageRating : 'No Rating'}</p>
-                                                    <p>Desc: {book.volumeInfo.description}</p>
-                                                </div>
+                                            ]
+                                        }
+                                    >
+                                        <div className="row">
+                                            <div className="col-md-3">
+                                                <img src={book.volumeInfo.imageLinks.smallThumbnail} alt="" className="imgclass" />
                                             </div>
-                                        </Card >
-                                    </form>
-
+                                            <div className="col-md-9">
+                                                <h6>{book.volumeInfo.title}</h6>
+                                                <p>Author: {book.volumeInfo.authors[0]}</p>
+                                                <p>Rating: {book.volumeInfo.averageRating ? book.volumeInfo.averageRating : 'No Rating'}</p>
+                                                <p>Desc: {book.volumeInfo.description}</p>
+                                            </div>
+                                        </div>
+                                    </Card >
                                 ))
                             }
                         </div>
