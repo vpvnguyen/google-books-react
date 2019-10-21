@@ -1,9 +1,10 @@
 const express = require('express');
 const router = express.Router();
+const path = require('path');
 
-// home
-router.get('/', (req, res) => {
-    res.send('index');
+// catch all
+router.get('*', (req, res) => {
+    res.sendFile(path.join(__dirname + '/client/build/index.html'));
 });
 
 // export router to ../server.js
