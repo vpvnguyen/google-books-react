@@ -11,54 +11,45 @@ export default class SearchPage extends Component {
         searchInput: '',
         searchResults: [],
         isSearched: false,
-    }
+    };
 
     // user input
     handleChange = event => {
         this.setState({ searchInput: event.target.value });
-    }
+    };
 
     // get google books api
     getBooks = event => {
         event.preventDefault();
 
         const searchInput = this.state.searchInput.trim();
-        console.log(`Search Input: ${searchInput}`);
 
         // get books from google api
         axios.get(`https://www.googleapis.com/books/v1/volumes?q=${searchInput}`)
-            .then(res => {
-                this.setState({ searchResults: res.data.items })
-                console.log(this.state.searchResults);
-            })
-            .catch(err => {
-                if (err) throw err;
-            })
+            .then(res => this.setState({ searchResults: res.data.items }))
+            .catch(err => console.log(err));
     };
 
     // save book to mongo db
-    saveBook = (e) => {
-        e.preventDefault()
-        const saveBookData = {
-            bookID: e.target.dataset.id,
-            title: e.target.dataset.title,
-            author: e.target.dataset.author,
-            description: e.target.dataset.description,
-            imglink: e.target.dataset.imglink,
-            rating: e.target.dataset.rating,
-            infolink: e.target.dataset.infolink,
-        }
-        console.log(e.target.dataset)
-        API.saveBook(saveBookData)
-            .then(saveBookResponse => {
-                console.log(`API saveBook SUCCESS: ${JSON.stringify(saveBookResponse.data)}`)
-            })
-            .catch(err => { console.log(`API saveBook ERROR: ${err}`) })
+    saveBook = event => {
+        event.preventDefault();
 
-    }
+        const saveBookData = {
+            bookID: event.target.dataset.id,
+            title: event.target.dataset.title,
+            author: event.target.dataset.author,
+            description: event.target.dataset.description,
+            imglink: event.target.dataset.imglink,
+            rating: event.target.dataset.rating,
+            infolink: event.target.dataset.infolink,
+        };
+
+        API.saveBook(saveBookData)
+            .then(saveBookResponse => console.log(`API saveBook SUCCESS: ${JSON.stringify(saveBookResponse.data)}`))
+            .catch(err => console.log(`API saveBook ERROR: ${err}`));
+    };
 
     render() {
-
         return (
             <div className="container">
                 <form className="col-md-12">
@@ -83,12 +74,12 @@ export default class SearchPage extends Component {
                             {
                                 this.state.searchResults.map(book => (
                                     <Card className="container"
-                                        key={`result-card-${book._id}`}
+                                        key={`result-card-${book.id}`}
                                         actions={
                                             [
-                                                <Button key={`result-view-${book._id}`}><a href={book.volumeInfo.infoLink} target="_blank" rel="noopener noreferrer">View</a></Button>,
+                                                <Button key={`result-view-${book.id}`}><a href={book.volumeInfo.infoLink} target="_blank" rel="noopener noreferrer">View</a></Button>,
                                                 <Button
-                                                    key={`result-save-${book._id}`}
+                                                    key={`result-save-${book.id}`}
                                                     data-id={book.id}
                                                     data-title={book.volumeInfo.title}
                                                     data-author={book.volumeInfo.authors[0]}

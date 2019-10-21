@@ -14,30 +14,29 @@ export default class SavedPage extends Component {
 
     componentDidMount() {
         this.loadSavedBooks();
-    }
+    };
 
     loadSavedBooks = () => {
         API.getSavedBooks()
-            .then(res => {
-                this.setState({ savedBooks: res.data });
+            .then(getSavedBooksResponse => {
+                this.setState({ savedBooks: getSavedBooksResponse.data });
             })
             .catch(err => console.log(err));
     };
 
-    deleteBookByID = (e) => {
-        e.preventDefault();
-        API.deleteBookByID(e.target.dataset.id)
+    deleteBookByID = event => {
+        event.preventDefault();
+        API.deleteBookByID(event.target.dataset.id)
             .then(deletedBookResponse => {
-                console.log('book deleted!');
-                console.log(deletedBookResponse.data)
+                window.location.reload();
             })
-            .catch(err => console.log(err))
-
-    }
+            .catch(err => console.log(err));
+    };
 
     render() {
         return (
             <>
+                {/* check if this.state.savedBooks has data */}
                 {
                     this.state.savedBooks && this.state.savedBooks.length > 0 ?
 
@@ -47,14 +46,24 @@ export default class SavedPage extends Component {
                                 this.state.savedBooks.map(book => (
                                     <Card className="container"
                                         key={`saved-card-${book._id}`}
+
+                                        // material-ui card action buttons
                                         actions={
                                             [
-                                                <Button key={`saved-view-${book._id}`}><a href={book.infolink} target="_blank" rel="noopener noreferrer">View</a></Button>,
+                                                <Button key={`saved-view-${book._id}`}>
+                                                    <a href={book.infolink} target="_blank" rel="noopener noreferrer">
+                                                        View
+                                                    </a>
+                                                </Button>,
+
+                                                // delete book by id
                                                 <Button
                                                     key={`saved-delete-${book._id}`}
                                                     data-id={book._id}
                                                     onClick={this.deleteBookByID}
-                                                > Delete</Button >
+                                                >
+                                                    Delete
+                                                </Button >
 
                                             ]
                                         }
@@ -73,11 +82,12 @@ export default class SavedPage extends Component {
                                     </Card >
                                 ))
                             }
+
                         </div>
 
                         : 'nothing'
                 }
             </>
-        )
-    }
-}
+        );
+    };
+};
