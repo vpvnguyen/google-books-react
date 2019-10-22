@@ -1,6 +1,6 @@
 const express = require('express');
 const path = require('path');
-const mongoose = require("mongoose");
+const mongoose = require('mongoose');
 const app = express();
 const booksController = require('./controllers/booksController.js');
 const viewRoutes = require('./routes/view.routes.js');
@@ -13,8 +13,8 @@ app.use(express.json());
 const MONGODB_URI = process.env.MONGODB_URI || `mongodb://localhost:27017/googleBooksDB`;
 
 mongoose.connect(MONGODB_URI, { useNewUrlParser: true, useUnifiedTopology: true })
-  .then(() => { console.log(`MongoDB Connected on ${MONGODB_URI}`) })
-  .catch((err) => { console.log(`MONGODB ERROR: ${err}`) });
+  .then(() => console.log(`MongoDB Connected on ${MONGODB_URI}`))
+  .catch(err => console.log(`MONGODB ERROR: ${err}`));
 
 // serve static; heroku
 if (process.env.NODE_ENV === 'production') {

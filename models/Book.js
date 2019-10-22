@@ -16,5 +16,5 @@ const bookSchema = new Schema({
 
 const Book = mongoose.model('Book', bookSchema);
 
-// export to schema to controller for CRUD
+// export Book model to controller
 module.exports = Book;
