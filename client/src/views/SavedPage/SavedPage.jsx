@@ -1,50 +1,85 @@
-import React, { Component } from 'react'
+import React, { Component } from 'react';
 
 //material-ui
+import { Container } from 'react-materialize';
 import { Card, Button } from 'react-materialize';
 
+// components
+import Preloader from '../../components/Preloader/Preloader.jsx';
 // api
 import API from '../../utils/API.js';
 
 export default class SavedPage extends Component {
 
     state = {
-        savedBooks: []
+        savedBooks: [],
+        deleteBookIndex: -1,
+        isLoading: true,
     };
 
     componentDidMount() {
+        this.setState({ isLoading: true });
         this.loadSavedBooks();
     };
 
     loadSavedBooks = () => {
         API.getSavedBooks()
             .then(getSavedBooksResponse => {
-                this.setState({ savedBooks: getSavedBooksResponse.data });
+                this.setState({
+                    savedBooks: getSavedBooksResponse.data,
+                    isLoading: false
+                });
             })
             .catch(err => console.log(err));
     };
 
     deleteBookByID = event => {
         event.preventDefault();
+
+        this.setState({
+            deleteBookIndex: event.target.dataset.deletebookindex,
+            isLoading: true,
+        });
+
         API.deleteBookByID(event.target.dataset.id)
-            .then(deletedBookResponse => {
-                window.location.reload();
+            .then(() => {
+
+                // loop saved books, return new array without deleted book
+                const newSavedBooks = [];
+
+                this.state.savedBooks.forEach((value, index) => {
+                    if (index !== Number(this.state.deleteBookIndex)) {
+                        newSavedBooks.push(value);
+                    }
+                });
+
+                this.setState({
+                    savedBooks: newSavedBooks,
+                    isLoading: false,
+                });
+
             })
             .catch(err => console.log(err));
     };
 
     render() {
         return (
-            <>
+            <Container>
+                {/* render progress bar */}
+                {this.state.isLoading ? <Preloader /> : ''}
+
                 {/* check if this.state.savedBooks has data */}
+
                 {
                     this.state.savedBooks && this.state.savedBooks.length > 0 ?
 
-                        <div className="row mt-5">
+                        <Container className="mt-5">
                             {/* map through array of objects and create card */}
                             {
-                                this.state.savedBooks.map(book => (
-                                    <Card className="container"
+                                this.state.savedBooks.map((book, index) => (
+                                    <Card
+                                        className="blue-grey darken-1"
+                                        textClassName="white-text"
                                         key={`saved-card-${book._id}`}
 
                                         // material-ui card action buttons
@@ -60,6 +95,7 @@ export default class SavedPage extends Component {
                                                 <Button
                                                     key={`saved-delete-${book._id}`}
                                                     data-id={book._id}
+                                                    data-deletebookindex={index}
                                                     onClick={this.deleteBookByID}
                                                 >
                                                     Delete
@@ -69,8 +105,10 @@ export default class SavedPage extends Component {
                                         }
                                     >
                                         <div className="row">
-                                            <div className="col-md-3">
-                                                <img src={book.imglink} alt="" className="imgclass" />
+                                            <div className="col-md-3  text-center m-auto">
+                                                <img
+                                                    className="mb-5"
+                                                    src={book.imglink} alt="Book Thumbnail" />
                                             </div>
                                             <div className="col-md-9">
                                                 <h6>{book.title}</h6>
@@ -83,11 +121,11 @@ export default class SavedPage extends Component {
                                 ))
                             }
 
-                        </div>
+                        </Container>
 
                         : 'nothing'
                 }
-            </>
+            </Container>
         );
     };
 };
