@@ -1,16 +1,23 @@
 import React, { Component } from 'react';
-import { Jumbotron } from 'react-bootstrap';
+import { Container, Col, Card } from 'react-materialize';
+import ActionSidebar from '../ActionSidebar/ActionSidebar.jsx';
 
 export default class Header extends Component {
 
     render() {
         return (
-            <Jumbotron>
-                <h1>Google Books Search!</h1>
-                <p>
-                    Search and save your favorite books!
-                </p>
-            </Jumbotron>
+            <Container>
+                <Col m={12} s={12}>
+                    <Card
+                        className="blue-grey darken-1"
+                        textClassName="white-text"
+                        title="Google Books Search"
+                        actions={[<ActionSidebar />]}
+                    >
+                        Search and save your favorite Google Book!
+</Card>
+                </Col>
+            </Container>
         )
     };
 };
