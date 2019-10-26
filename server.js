@@ -5,6 +5,8 @@ const app = express();
 const booksController = require('./controllers/booksController.js');
 const viewRoutes = require('./routes/view.routes.js');
 
+const PORT = process.env.PORT || 3001;
+
 // middleware
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
@@ -25,21 +27,10 @@ if (process.env.NODE_ENV === 'production') {
 app.use(booksController);
 app.use(viewRoutes);
 
-// if (process.env.NODE_ENV === 'production') {
-//   // Serve any static files
-//   app.use(express.static(path.join(__dirname, 'client/build')));
-//   // Handle React routing, return all requests to React app
-//   app.get('*', function (req, res) {
-//     res.sendFile(path.join(__dirname, 'client/build', 'index.html'));
-//   });
-// }
-
-const PORT = process.env.PORT || 3001;
-
-app.listen(PORT, () => {
+app.listen(PORT, () =>
   console.log(`
   -----------------------------
   Express Server running on: http://localhost:${PORT}!
   -----------------------------
-  `);
-});
+  `)
+);

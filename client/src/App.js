@@ -4,6 +4,7 @@ import React, { Component } from "react";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import "./App.css";
 
+// toast
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
@@ -15,14 +16,17 @@ import SearchPage from './views/SearchPage/SearchPage.jsx';
 import SavedPage from './views/SavedPage/SavedPage.jsx';
 
 // init toast component
-toast.configure();
+toast.configure({
+  autoClose: 8000,
+  draggable: false,
+});
 
-class App extends Component {
+export default class App extends Component {
 
   render() {
     return (
-
       <>
+
         <Router>
           <Switch>
             <Route exact path="/" component={SearchPage} />
@@ -32,7 +36,5 @@ class App extends Component {
 
       </>
     );
-  }
-}
-
-export default App;
+  };
+};

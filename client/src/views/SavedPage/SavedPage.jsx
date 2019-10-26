@@ -6,6 +6,7 @@ import { Card, Button } from 'react-materialize';
 
 // components
 import Preloader from '../../components/Preloader/Preloader.jsx';
+
 // api
 import API from '../../utils/API.js';
 
@@ -17,11 +18,13 @@ export default class SavedPage extends Component {
         isLoading: true,
     };
 
+    // on load, get saved books from mongodb
     componentDidMount() {
         this.setState({ isLoading: true });
         this.loadSavedBooks();
     };
 
+    // GET saved books
     loadSavedBooks = () => {
         API.getSavedBooks()
             .then(getSavedBooksResponse => {
@@ -33,6 +36,7 @@ export default class SavedPage extends Component {
             .catch(err => console.log(err));
     };
 
+    // DELETE saved book by ID
     deleteBookByID = event => {
         event.preventDefault();
 
@@ -64,6 +68,7 @@ export default class SavedPage extends Component {
 
     render() {
         return (
+
             <Container>
                 {/* render progress bar */}
                 {this.state.isLoading ? <Preloader /> : ''}
@@ -104,6 +109,7 @@ export default class SavedPage extends Component {
                                             ]
                                         }
                                     >
+                                        {/* display content information */}
                                         <div className="row">
                                             <div className="col-md-3  text-center m-auto">
                                                 <img
@@ -125,6 +131,7 @@ export default class SavedPage extends Component {
 
                         : 'nothing'
                 }
+
             </Container>
         );
     };

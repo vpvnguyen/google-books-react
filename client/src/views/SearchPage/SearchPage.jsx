@@ -1,14 +1,16 @@
 import React, { Component } from 'react';
-import { TextInput, Button, Icon, Card } from 'react-materialize';
-import { toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
 
+// material ui
+import { Container, TextInput, Button, Icon, Card } from 'react-materialize';
+
+// toast
+import { toast } from 'react-toastify';
+
+// components
 import Header from '../../components/Header/Header.jsx';
 
 // api
-import axios from 'axios';
 import API from '../../utils/API.js';
-import { Container } from 'react-materialize';
 
 export default class SearchPage extends Component {
 
@@ -21,7 +23,7 @@ export default class SearchPage extends Component {
         message: '',
     };
 
-
+    // on load, set message
     componentDidMount() {
         this.setState({
             isLoading: false,
@@ -29,11 +31,12 @@ export default class SearchPage extends Component {
         });
     };
 
+    // toast notifications
     toastId = null;
     notifySuccess = (toastMessage) => this.toastId = toast.success(toastMessage, { position: toast.POSITION.BOTTOM_RIGHT });
     notifyInfo = (toastMessage) => this.toastId = toast.info(toastMessage, { position: toast.POSITION.BOTTOM_RIGHT });
 
-    // user input
+    // set user input
     handleChange = event => {
         this.setState({
             searchInput: event.target.value,
@@ -53,7 +56,7 @@ export default class SearchPage extends Component {
         }
 
         // get books from google api
-        axios.get(`https://www.googleapis.com/books/v1/volumes?q=${searchInput}`)
+        API.getBooks(searchInput)
             .then(res => this.setState({
                 searchResults: res.data.items,
                 message: 'View or Save a book below!',
@@ -113,20 +116,20 @@ export default class SearchPage extends Component {
                 <Container className="mt-5">
                     <div className="row p-5">
                         <form className="col-md-12">
+
                             <TextInput
                                 label='Search for a book...'
                                 value={this.state.searchInput}
                                 onChange={this.handleChange}
                             />
+
                             <Button
                                 type='submit'
                                 waves='light'
                                 onClick={this.getBooks}
                             >
                                 Submit
-                        <Icon right>
-                                    send
-                        </Icon>
+                                <Icon right>send</Icon>
                             </Button>
 
                         </form>

@@ -6,6 +6,7 @@ const Book = require('../models/Book.js');
 
 // display all friends list json
 router.get('/getBooks', (req, res) => {
+
     Book.find({})
         .then(books => {
             console.log('finding books');
@@ -18,8 +19,9 @@ router.get('/getBooks', (req, res) => {
         });
 });
 
+// save book
 router.post('/saveBook/', (req, res) => {
-    console.log(req.body)
+
     Book.create(req.body)
         .then(savedBookReponse => {
             console.log(`POST /saveBook/ SUCCESS: ${savedBookReponse}`);
@@ -32,6 +34,7 @@ router.post('/saveBook/', (req, res) => {
 
 });
 
+// get all saved books
 router.get('/getSavedBooks/', (req, res) => {
 
     Book.find({})
@@ -46,8 +49,9 @@ router.get('/getSavedBooks/', (req, res) => {
         });
 });
 
+// delete book by id
 router.delete('/deleteBook/:id', (req, res) => {
-    // console.log(req.params.id);
+
     Book.findByIdAndRemove(req.params.id)
         .then((deletedBookResponse) => {
             res.send(deletedBookResponse)
@@ -55,7 +59,7 @@ router.delete('/deleteBook/:id', (req, res) => {
         .catch(err => {
             console.log(err)
             res.sendStatus(500);
-        })
-})
+        });
+});
 
 module.exports = router;

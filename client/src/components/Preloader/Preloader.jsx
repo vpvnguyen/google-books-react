@@ -1,4 +1,6 @@
 import React, { Component } from 'react';
+
+// material ui
 import { Row, Col, ProgressBar } from 'react-materialize';
 
 // style
@@ -12,6 +14,6 @@ export default class Preloader extends Component {
                     <ProgressBar className="preloader-bar" />
                 </Col>
             </Row>
-        )
-    }
-}
+        );
+    };
+};
