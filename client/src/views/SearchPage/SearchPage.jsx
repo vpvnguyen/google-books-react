@@ -4,7 +4,6 @@ import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 import Header from '../../components/Header/Header.jsx';
-import Toast from '../../components/Toast/Toast.jsx';
 
 // api
 import axios from 'axios';
@@ -31,7 +30,8 @@ export default class SearchPage extends Component {
     };
 
     toastId = null;
-    notify = (toastMessage) => this.toastId = toast(toastMessage, { autoClose: false });
+    notifySuccess = (toastMessage) => this.toastId = toast.success(toastMessage, { position: toast.POSITION.BOTTOM_RIGHT });
+    notifyInfo = (toastMessage) => this.toastId = toast.info(toastMessage, { position: toast.POSITION.BOTTOM_RIGHT });
 
     // user input
     handleChange = event => {
@@ -42,24 +42,24 @@ export default class SearchPage extends Component {
 
     };
 
-
-
-
-
-
     // get google books api
     getBooks = event => {
         event.preventDefault();
 
         const searchInput = this.state.searchInput.trim();
-        this.notify('submit!');
+
+        if (searchInput === '') {
+            this.notifyInfo('Try typing in a book!');
+        }
+
         // get books from google api
         axios.get(`https://www.googleapis.com/books/v1/volumes?q=${searchInput}`)
             .then(res => this.setState({
                 searchResults: res.data.items,
-                message: `Found ${res.data.items.length} "${searchInput}" books!`,
+                message: 'View or Save a book below!',
                 isLoading: false
             }))
+            .then(() => this.notifySuccess(`'${searchInput}' searched!`))
             .catch(err => console.log(err));
     };
 
@@ -197,8 +197,6 @@ export default class SearchPage extends Component {
 
                             : 'nothing'
                     }
-
-                    <Toast />
 
                 </Container>
             </>
