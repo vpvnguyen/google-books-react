@@ -30,7 +30,8 @@
     "react-bootstrap": "^1.0.0-beta.14",
     "react-materialize": "^3.4.1",
     "react-router-dom": "^5.1.2",
-    "react-scroll-parallax": "^2.2.0"
+    "react-scroll-parallax": "^2.2.0",
+    "react-toastify": "^5.4.0"
   },
   "devServer": {
     "compress": "true",

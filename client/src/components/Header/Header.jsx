@@ -14,8 +14,8 @@ export default class Header extends Component {
                         title="Google Books Search"
                         actions={[<ActionSidebar />]}
                     >
-                        Search and save your favorite Google Book!
-</Card>
+                        {this.props.message}
+                    </Card>
                 </Col>
             </Container>
         )

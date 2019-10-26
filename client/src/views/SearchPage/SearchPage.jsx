@@ -1,5 +1,10 @@
 import React, { Component } from 'react';
 import { TextInput, Button, Icon, Card } from 'react-materialize';
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
+import Header from '../../components/Header/Header.jsx';
+import Toast from '../../components/Toast/Toast.jsx';
 
 // api
 import axios from 'axios';
@@ -14,11 +19,19 @@ export default class SearchPage extends Component {
         isSearched: false,
         savedBookIndex: -1,
         isLoading: false,
+        message: '',
     };
 
+
     componentDidMount() {
-        this.setState({ isLoading: false });
+        this.setState({
+            isLoading: false,
+            message: 'Type a book below...',
+        });
     };
+
+    toastId = null;
+    notify = (toastMessage) => this.toastId = toast(toastMessage, { autoClose: false });
 
     // user input
     handleChange = event => {
@@ -26,18 +39,25 @@ export default class SearchPage extends Component {
             searchInput: event.target.value,
             isLoading: true,
         });
+
     };
+
+
+
+
+
 
     // get google books api
     getBooks = event => {
         event.preventDefault();
 
         const searchInput = this.state.searchInput.trim();
-
+        this.notify('submit!');
         // get books from google api
         axios.get(`https://www.googleapis.com/books/v1/volumes?q=${searchInput}`)
             .then(res => this.setState({
                 searchResults: res.data.items,
+                message: `Found ${res.data.items.length} "${searchInput}" books!`,
                 isLoading: false
             }))
             .catch(err => console.log(err));
@@ -86,96 +106,102 @@ export default class SearchPage extends Component {
 
     render() {
         return (
+            <>
 
-            <Container className="mt-5">
-                <div className="row p-5">
-                    <form className="col-md-12">
-                        <TextInput
-                            label='Search for a book...'
-                            value={this.state.searchInput}
-                            onChange={this.handleChange}
-                        />
-                        <Button
-                            type='submit'
-                            waves='light'
-                            onClick={this.getBooks}
-                        >
-                            Submit
+                <Header message={this.state.message} />
+
+                <Container className="mt-5">
+                    <div className="row p-5">
+                        <form className="col-md-12">
+                            <TextInput
+                                label='Search for a book...'
+                                value={this.state.searchInput}
+                                onChange={this.handleChange}
+                            />
+                            <Button
+                                type='submit'
+                                waves='light'
+                                onClick={this.getBooks}
+                            >
+                                Submit
                         <Icon right>
-                                send
+                                    send
                         </Icon>
-                        </Button>
+                            </Button>
 
-                    </form>
-                </div>
+                        </form>
+                    </div>
 
 
-                {
-                    this.state.searchResults && this.state.searchResults.length > 0 ?
+                    {
+                        this.state.searchResults && this.state.searchResults.length > 0 ?
 
-                        <Container className="mt-5">
-                            {/* map through array of objects and create card */}
-                            {
-                                this.state.searchResults.map((book, index) => (
+                            <Container className="mt-5">
+                                {/* map through array of objects and create card */}
+                                {
+                                    this.state.searchResults.map((book, index) => (
 
-                                    <Card
-                                        className="blue-grey darken-1"
-                                        textClassName="white-text"
-                                        key={`result-card-${book.id}`}
-                                        actions={
-                                            [
-                                                <Button
-                                                    key={`result-view-${book.id}`}
-                                                >
-                                                    <a
-                                                        href={book.volumeInfo.infoLink}
-                                                        target="_blank"
-                                                        rel="noopener noreferrer"
+                                        <Card
+                                            className="blue-grey darken-1"
+                                            textClassName="white-text"
+                                            key={`result-card-${book.id}`}
+                                            actions={
+                                                [
+                                                    <Button
+                                                        key={`result-view-${book.id}`}
                                                     >
-                                                        View
+                                                        <a
+                                                            href={book.volumeInfo.infoLink}
+                                                            target="_blank"
+                                                            rel="noopener noreferrer"
+                                                        >
+                                                            View
                                                     </a>
-                                                </Button>,
-                                                <Button
-                                                    key={`result-save-${book.id}`}
-                                                    data-id={book.id}
-                                                    data-title={book.volumeInfo.title}
-                                                    data-author={book.volumeInfo.authors[0]}
-                                                    data-imglink={book.volumeInfo.imageLinks.smallThumbnail ? book.volumeInfo.imageLinks.smallThumbnail : ''}
-                                                    data-rating={book.volumeInfo.averageRating ? book.volumeInfo.averageRating : ''}
-                                                    data-description={book.volumeInfo.description}
-                                                    data-infolink={book.volumeInfo.infoLink}
-                                                    data-bookindex={index}
-                                                    onClick={this.saveBook}
-                                                >
-                                                    Save
+                                                    </Button>,
+                                                    <Button
+                                                        key={`result-save-${book.id}`}
+                                                        data-id={book.id}
+                                                        data-title={book.volumeInfo.title}
+                                                        data-author={book.volumeInfo.authors[0]}
+                                                        data-imglink={book.volumeInfo.imageLinks.smallThumbnail ? book.volumeInfo.imageLinks.smallThumbnail : ''}
+                                                        data-rating={book.volumeInfo.averageRating ? book.volumeInfo.averageRating : ''}
+                                                        data-description={book.volumeInfo.description}
+                                                        data-infolink={book.volumeInfo.infoLink}
+                                                        data-bookindex={index}
+                                                        onClick={this.saveBook}
+                                                    >
+                                                        Save
                                                 </Button >
-                                            ]
-                                        }
-                                    >
-                                        <div className="row">
-                                            <div className="col-md-3 text-center m-auto">
-                                                <img
-                                                    className="mb-5"
-                                                    src={book.volumeInfo.imageLinks.smallThumbnail}
-                                                    alt="Book Thumbnail"
-                                                />
+                                                ]
+                                            }
+                                        >
+                                            <div className="row">
+                                                <div className="col-md-3 text-center m-auto">
+                                                    <img
+                                                        className="mb-5"
+                                                        src={book.volumeInfo.imageLinks.smallThumbnail}
+                                                        alt="Book Thumbnail"
+                                                    />
+                                                </div>
+                                                <div className="col-md-9">
+                                                    <h6>{book.volumeInfo.title}</h6>
+                                                    <p>Author: {book.volumeInfo.authors[0]}</p>
+                                                    <p>Rating: {book.volumeInfo.averageRating ? book.volumeInfo.averageRating : 'No Rating'}</p>
+                                                    <p>Desc: {book.volumeInfo.description}</p>
+                                                </div>
                                             </div>
-                                            <div className="col-md-9">
-                                                <h6>{book.volumeInfo.title}</h6>
-                                                <p>Author: {book.volumeInfo.authors[0]}</p>
-                                                <p>Rating: {book.volumeInfo.averageRating ? book.volumeInfo.averageRating : 'No Rating'}</p>
-                                                <p>Desc: {book.volumeInfo.description}</p>
-                                            </div>
-                                        </div>
-                                    </Card >
-                                ))
-                            }
-                        </Container>
+                                        </Card >
+                                    ))
+                                }
+                            </Container>
 
-                        : 'nothing'
-                }
-            </Container>
+                            : 'nothing'
+                    }
 
+                    <Toast />
+
+                </Container>
+            </>
         )
-    }
-}
+    };
+};
