@@ -60,8 +60,24 @@ export default class SearchPage extends Component {
         this.setState({
             searchInput: event.target.value,
         });
-
     };
+
+    // validate google books search results
+    validateResults = searchResults => {
+        return searchResults.map((items) => {
+
+            items = {
+                id: items.id,
+                title: items.volumeInfo.title,
+                author: items.volumeInfo.authors ? items.volumeInfo.authors : 'N/A',
+                description: items.volumeInfo.description,
+                imgLink: items.volumeInfo.imageLinks ? items.volumeInfo.imageLinks : { smallThumbnail: 'https://cdn.shopify.com/s/files/1/0533/2089/files/placeholder-images-image_large.png?v=1530129081' },
+                rating: items.volumeInfo.averageRating ? items.volumeInfo.averageRating : 'N/A',
+                infoLink: items.volumeInfo.infoLink ? items.volumeInfo.infoLink : 'N/A',
+            }
+            return items;
+        })
+    }
 
     // get google books api
     getBooks = event => {
@@ -80,11 +96,21 @@ export default class SearchPage extends Component {
 
         // get books from google api
         API.getBooks(searchInput)
-            .then(res => this.setState({
-                searchResults: res.data.items,
-                message: 'View or Save a book below!',
-                isLoading: false,
-            }))
+            .then(res => {
+
+                // validate results
+                const validated = this.validateResults(res.data.items);
+                console.log('VALIDATED: ' + JSON.stringify(validated))
+
+                this.setState({
+                    searchResults: validated,
+                    message: 'View or Save a book below!',
+                    isLoading: false,
+                });
+
+                console.log('state')
+                console.log(this.state.searchResults)
+            })
             .then(() => this.notify(`'${searchInput}' searched!`))
             .catch(err => {
                 this.setState({ hasError: true });
@@ -167,7 +193,8 @@ export default class SearchPage extends Component {
                                         actions={[
                                             <Animated
                                                 animationIn="bounce"
-                                                animationInDelay={1000}>
+                                                animationInDelay={1000}
+                                            >
 
                                                 <Button
                                                     type='submit'
@@ -188,7 +215,9 @@ export default class SearchPage extends Component {
                                             <TextInput
                                                 label='Type a book here...'
                                                 value={this.state.searchInput}
-                                                onChange={this.handleChange} />
+                                                onChange={this.handleChange}
+                                            />
+
                                         </Animated>
 
                                     </Card>
@@ -215,7 +244,7 @@ export default class SearchPage extends Component {
                                                     <a
                                                         key={`view-link-${book.id}`}
                                                         className="view-button"
-                                                        href={book.volumeInfo.infoLink}
+                                                        href={book.infoLink}
                                                         target="_blank"
                                                         rel="noopener noreferrer"
                                                     >
@@ -238,12 +267,12 @@ export default class SearchPage extends Component {
                                                         key={`result-save-${book.id}`}
                                                         className="save-text"
                                                         data-id={book.id}
-                                                        data-title={book.volumeInfo.title}
-                                                        data-author={book.volumeInfo.authors[0]}
-                                                        data-imglink={book.volumeInfo.imageLinks.smallThumbnail ? book.volumeInfo.imageLinks.smallThumbnail : 'No image'}
-                                                        data-rating={book.volumeInfo.averageRating ? book.volumeInfo.averageRating : 'No rating'}
-                                                        data-description={book.volumeInfo.description}
-                                                        data-infolink={book.volumeInfo.infoLink}
+                                                        data-title={book.title}
+                                                        data-author={book.author}
+                                                        data-imglink={book.imgLink.smallThumbnail}
+                                                        data-rating={book.rating}
+                                                        data-description={book.description}
+                                                        data-infolink={book.infoLink}
                                                         data-bookindex={index}
                                                         tooltip="Save Book"
                                                         tooltipOptions={{ position: 'top' }}
@@ -260,7 +289,7 @@ export default class SearchPage extends Component {
                                                 <div className="col-md-3 text-center m-auto">
                                                     <img
                                                         className="book-image mb-5"
-                                                        src={book.volumeInfo.imageLinks.smallThumbnail}
+                                                        src={book.imgLink.smallThumbnail}
                                                         alt="Book Thumbnail"
                                                     />
                                                 </div>
@@ -268,32 +297,22 @@ export default class SearchPage extends Component {
                                                     <Card
                                                         className="blue-grey darken-1"
                                                         textClassName="white-text"
-                                                        key={`saved-card-info-${book._id}`}
+                                                        key={`saved-card-info-${book.id}`}
                                                     >
-                                                        <h6 className="sandybrown-text text-center">{book.volumeInfo.title}</h6>
+                                                        <h6 className="sandybrown-text text-center">{book.title}</h6>
                                                         <hr />
-                                                        <p className="text-center">Author: {book.volumeInfo.authors[0] || 'N/A'}</p>
-                                                        <p className="text-center">Rating: {book.volumeInfo.averageRating ? book.volumeInfo.averageRating : 'N/A'}</p>
+                                                        <p className="text-center">Author: {book.author}</p>
+                                                        <p className="text-center">Rating: {book.rating ? book.rating : 'undefined'}</p>
                                                     </Card>
 
-                                                    {
-                                                        book.volumeInfo.description ?
-                                                            <Card
-                                                                className="blue-grey darken-1"
-                                                                textClassName="white-text"
-                                                                key={`saved-card-info-${book._id}`}
-                                                            >
-                                                                {book.volumeInfo.description}
-                                                            </Card>
-                                                            :
-                                                            <Card
-                                                                className="blue-grey darken-1"
-                                                                textClassName="white-text"
-                                                                key={`saved-card-info-${book._id}`}
-                                                            >
-                                                                No summary available
-                                                        </Card>
-                                                    }
+                                                    <Card
+                                                        className="blue-grey darken-1"
+                                                        textClassName="white-text"
+                                                        key={`saved-card-info-${book.id}`}
+                                                    >
+                                                        {book.description}
+                                                    </Card>
+
 
                                                 </div>
                                             </div>
