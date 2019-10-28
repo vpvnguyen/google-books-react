@@ -9,13 +9,11 @@ router.get('/getBooks', (req, res) => {
 
     Book.find({})
         .then(books => {
-            console.log('finding books');
-            console.log(books);
             res.send(books);
         })
         .catch(err => {
             console.log(err);
-            res.sendStatus(500);
+            res.send('No Books Found');
         });
 });
 
@@ -39,8 +37,6 @@ router.get('/getSavedBooks/', (req, res) => {
 
     Book.find({})
         .then(books => {
-            console.log('finding books');
-            console.log(books);
             res.send(books);
         })
         .catch(err => {
@@ -54,6 +50,8 @@ router.delete('/deleteBook/:id', (req, res) => {
 
     Book.findByIdAndRemove(req.params.id)
         .then((deletedBookResponse) => {
+            console.log('\n hererere')
+            console.log(deletedBookResponse.title)
             res.send(deletedBookResponse)
         })
         .catch(err => {
