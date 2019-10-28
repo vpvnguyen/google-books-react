@@ -136,7 +136,9 @@ export default class SavedPage extends Component {
                                                             rel="noopener noreferrer">
                                                             <Button
                                                                 key={`saved-view-${book._id}`}
-                                                                className="view-text">
+                                                                className="view-text"
+                                                                tooltip="Link to Book"
+                                                                tooltipOptions={{ position: 'top' }}>
                                                                 <Icon key={`icon-view-${book.id}`} left>find_in_page</Icon>
                                                                 View
                                                             </Button>
@@ -149,7 +151,10 @@ export default class SavedPage extends Component {
                                                             className="delete-text"
                                                             data-id={book._id}
                                                             data-deletebookindex={index}
-                                                            onClick={this.deleteBookByID}>
+                                                            tooltip="Delete Book"
+                                                            tooltipOptions={{ position: 'top' }}
+                                                            onClick={this.deleteBookByID}
+                                                        >
                                                             <Icon key={`icon-delete-${book._id}`} left>delete</Icon>
                                                             Delete
                                                         </Button >

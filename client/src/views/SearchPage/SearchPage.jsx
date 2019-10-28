@@ -170,6 +170,8 @@ export default class SearchPage extends Component {
                                                 <Button
                                                     type='submit'
                                                     waves='light'
+                                                    tooltip="Search Book"
+                                                    tooltipOptions={{ position: 'right' }}
                                                     onClick={this.getBooks}
                                                 >
                                                     Submit
@@ -219,6 +221,8 @@ export default class SearchPage extends Component {
                                                         <Button
                                                             key={`result-view-${book.id}`}
                                                             className="view-text"
+                                                            tooltip="Link to Book"
+                                                            tooltipOptions={{ position: 'top' }}
                                                         >
                                                             View
                                                                 <Icon key={`icon-view-${book.id}`} left>find_in_page</Icon>
@@ -239,6 +243,8 @@ export default class SearchPage extends Component {
                                                         data-description={book.volumeInfo.description}
                                                         data-infolink={book.volumeInfo.infoLink}
                                                         data-bookindex={index}
+                                                        tooltip="Save Book"
+                                                        tooltipOptions={{ position: 'top' }}
                                                         onClick={this.saveBook}
                                                     >
                                                         Save
@@ -268,8 +274,6 @@ export default class SearchPage extends Component {
                                 </div>
 
                             ))
-
-
 
                             :
 

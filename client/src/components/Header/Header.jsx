@@ -26,18 +26,35 @@ export default class Header extends Component {
                             actions={[
                                 <Link to="/">
                                     <Button
-                                        className={this.props.pageLoaded === '/' ? 'focused' : 'white-text'}>
+                                        className={this.props.pageLoaded === '/' ? 'focused' : 'white-text'}
+                                        tooltip="Go to Search Page"
+                                        tooltipOptions={{ position: 'bottom' }}>
                                         Search For Books
                                         <Icon left>search</Icon>
                                     </Button>
                                 </Link>,
                                 <Link to="/saved">
                                     <Button
-                                        className={this.props.pageLoaded === '/saved' ? 'focused' : 'white-text'}>
+                                        className={this.props.pageLoaded === '/saved' ? 'focused' : 'white-text'}
+                                        tooltip="Go to Saved Books Page"
+                                        tooltipOptions={{ position: 'bottom' }}>
                                         All Saved Books
                                         <Icon left>bookmark_border</Icon>
                                     </Button>
-                                </Link>
+                                </Link>,
+                                <a
+                                    href="https://github.com/vpvnguyen/google-books-react"
+                                    target="_blank"
+                                    rel="noopener noreferrer">
+                                    <Button
+                                        className="grey-text"
+                                        tooltip="Link to Github"
+                                        tooltipOptions={{ position: 'bottom' }}>
+                                        Github
+                                        <Icon left>code</Icon>
+                                    </Button>
+                                </a>
+
                             ]}
                         >
                             {this.props.message}
