@@ -27,8 +27,6 @@ export default class SearchPage extends Component {
         isHeaderVisible: true,
         isSearchVisible: true,
         isCardVisible: true,
-        isTyping: '',
-        hasError: false,
     };
 
     // on load, set message
@@ -40,12 +38,6 @@ export default class SearchPage extends Component {
             isCardVisible: true,
 
         });
-    };
-
-    // handle errors from bad search
-    componentDidCatch(error) {
-        this.setState({ hasError: true });
-
     };
 
     // toast notifications
@@ -90,6 +82,7 @@ export default class SearchPage extends Component {
 
         const searchInput = this.state.searchInput.trim();
 
+        // check if search is empty
         if (searchInput === '') {
             return this.notify('Try typing in a book!');
         }
@@ -108,10 +101,8 @@ export default class SearchPage extends Component {
                 });
 
             })
-            .then(() => this.notify(`'${searchInput}' searched!`))
-            .catch(err => {
-                this.setState({ hasError: true });
-            });
+            .then(() => this.notify(`[${searchInput}] has been searched!`))
+            .catch(err => console.log(err));
     };
 
     // save book to mongo db
@@ -134,8 +125,8 @@ export default class SearchPage extends Component {
             isCardVisible: false,
         });
 
+        // POST save book
         API.saveBook(saveBookData)
-            .then(saveBookResponse => console.log(`API saveBook SUCCESS: ${JSON.stringify(saveBookResponse.data)}`))
             .catch(err => console.log(`API saveBook ERROR: ${err}`))
             .then(() => {
 
@@ -154,7 +145,8 @@ export default class SearchPage extends Component {
                     isCardVisible: true,
                 });
 
-            });
+            })
+            .then(() => this.notify(`'${saveBookData.title}' has been saved!`));
     };
 
     render() {
@@ -225,7 +217,7 @@ export default class SearchPage extends Component {
 
 
                     {
-                        !this.state.hasError && this.state.searchResults.length > 0 ?
+                        this.state.searchResults.length > 0 ?
 
                             // map through array of objects and create cards for each book
                             this.state.searchResults.map((book, index) => (

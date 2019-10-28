@@ -21,6 +21,7 @@ export default class SavedPage extends Component {
         pageLoaded: '/saved',
         savedBooks: [],
         deleteBookIndex: -1,
+        deleteBookTitle: '',
         isSavedPageLoading: false,
         message: '',
         isCardVisible: true,
@@ -29,8 +30,10 @@ export default class SavedPage extends Component {
 
     // toast notifications
     toastId = null;
-    notifyWarning = (toastMessage) => this.toastId = toast.warning(toastMessage, { position: toast.POSITION.BOTTOM_RIGHT });
-    // notifyNoSavedBooks = (toastMessage) => this.toastId = toast.info(toastMessage, { position: toast.POSITION.BOTTOM_RIGHT });
+    notify = (toastMessage) => this.toastId = toast(toastMessage, {
+        position: toast.POSITION.BOTTOM_RIGHT,
+        className: "blue-grey darken-4 toast-whitetext text-center"
+    });
 
     // on load, get saved books from mongodb
     componentDidMount() {
@@ -63,6 +66,7 @@ export default class SavedPage extends Component {
 
         this.setState({
             deleteBookIndex: event.target.dataset.deletebookindex,
+            deleteBookTitle: event.target.dataset.title,
             isSavedPageLoading: true,
             isCardVisible: false,
         });
@@ -85,8 +89,9 @@ export default class SavedPage extends Component {
                     isCardVisible: true,
                 });
 
+                this.notify(`[${this.state.deleteBookTitle}] has been deleted...`);
+
             })
-            .then((res) => this.notifyWarning(`deleted ${res.title}`))
             .catch(err => console.log(err));
     };
 
@@ -159,6 +164,7 @@ export default class SavedPage extends Component {
                                                             key={`saved-delete-${book._id}`}
                                                             className="delete-text"
                                                             data-id={book._id}
+                                                            data-title={book.title}
                                                             data-deletebookindex={index}
                                                             tooltip="Delete Book"
                                                             tooltipOptions={{ position: 'top' }}
