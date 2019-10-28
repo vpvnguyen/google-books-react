@@ -1,0 +1,15 @@
+.delete-text {
+    color: #FFFFFF;
+}
+
+.delete-text:hover {
+    color: red;
+}
+
+.view-text {
+    color: #FFFFFF;
+}
+
+.view-text:hover {
+    color: rgb(89, 0, 255);
+}

@@ -1,0 +1,27 @@
+a, a:hover {
+    text-decoration: none;
+}
+
+.sandybrown-text {
+    color: sandybrown;
+}
+
+.save-text {
+    color: #FFFFFF;
+}
+
+.save-text:hover {
+    color: #00695c;
+}
+
+.view-text {
+    color: #FFFFFF;
+}
+
+.view-text:hover {
+    color: rgb(89, 0, 255);
+}
+
+.toast-whitetext {
+    color: white;
+}

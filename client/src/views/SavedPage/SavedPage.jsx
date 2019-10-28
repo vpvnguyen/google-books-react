@@ -1,11 +1,19 @@
 import React, { Component } from 'react';
 
+// style
+import './SavedPage.css';
+
 //material-ui
 import { Container } from 'react-materialize';
-import { Card, Button } from 'react-materialize';
+import { Card, Button, Icon } from 'react-materialize';
+import { Animated } from 'react-animated-css';
+
+// toast
+import { toast } from 'react-toastify';
 
 // components
 import Preloader from '../../components/Preloader/Preloader.jsx';
+import Header from '../../components/Header/Header.jsx';
 
 // api
 import API from '../../utils/API.js';
@@ -13,14 +21,29 @@ import API from '../../utils/API.js';
 export default class SavedPage extends Component {
 
     state = {
+        pageLoaded: '/saved',
         savedBooks: [],
         deleteBookIndex: -1,
-        isLoading: true,
+        isSavedPageLoading: false,
+        message: '',
+        isCardVisible: true,
+        isHeaderVisible: true,
     };
+
+    // toast notifications
+    toastId = null;
+    notifyWarning = (toastMessage) => this.toastId = toast.warning(toastMessage, { position: toast.POSITION.BOTTOM_RIGHT });
+    // notifyNoSavedBooks = (toastMessage) => this.toastId = toast.info(toastMessage, { position: toast.POSITION.BOTTOM_RIGHT });
 
     // on load, get saved books from mongodb
     componentDidMount() {
-        this.setState({ isLoading: true });
+        this.setState({
+            isSavedPageLoading: true,
+            isHeaderVisible: true,
+            isCardVisible: true,
+            message: '',
+        });
+
         this.loadSavedBooks();
     };
 
@@ -30,7 +53,8 @@ export default class SavedPage extends Component {
             .then(getSavedBooksResponse => {
                 this.setState({
                     savedBooks: getSavedBooksResponse.data,
-                    isLoading: false
+                    isSavedPageLoading: false,
+                    message: 'All saved books...',
                 });
             })
             .catch(err => console.log(err));
@@ -42,7 +66,8 @@ export default class SavedPage extends Component {
 
         this.setState({
             deleteBookIndex: event.target.dataset.deletebookindex,
-            isLoading: true,
+            isSavedPageLoading: true,
+            isCardVisible: false,
         });
 
         API.deleteBookByID(event.target.dataset.id)
@@ -59,80 +84,113 @@ export default class SavedPage extends Component {
 
                 this.setState({
                     savedBooks: newSavedBooks,
-                    isLoading: false,
+                    isSavedPageLoading: false,
+                    isCardVisible: true,
                 });
 
             })
+            .then((res) => this.notifyWarning(`deleted ${res.title}`))
             .catch(err => console.log(err));
     };
 
+
     render() {
         return (
+            <>
+                <Animated animationIn="fadeInDown" animationOut="fadeOut" isVisible={this.state.isHeaderVisible}>
+                    <Header
+                        message={this.state.message}
+                        isSavedPageLoading={this.state.isSavedPageLoading}
+                        pageLoaded={this.state.pageLoaded}
+                    />
+                </Animated>
 
-            <Container>
-                {/* render progress bar */}
-                {this.state.isLoading ? <Preloader /> : ''}
+                {this.state.isSavedPageLoading ? <Preloader /> : null}
 
-                {/* check if this.state.savedBooks has data */}
+                <Container>
 
-                {
-                    this.state.savedBooks && this.state.savedBooks.length > 0 ?
+                    {/* check if this.state.savedBooks has data */}
 
-                        <Container className="mt-5">
-                            {/* map through array of objects and create card */}
-                            {
-                                this.state.savedBooks.map((book, index) => (
-                                    <Card
-                                        className="blue-grey darken-1"
-                                        textClassName="white-text"
-                                        key={`saved-card-${book._id}`}
+                    {
+                        this.state.savedBooks.length !== 0 ?
 
-                                        // material-ui card action buttons
-                                        actions={
-                                            [
-                                                <Button key={`saved-view-${book._id}`}>
-                                                    <a href={book.infolink} target="_blank" rel="noopener noreferrer">
-                                                        View
-                                                    </a>
-                                                </Button>,
+                            <div>
+                                {/* map through array of objects and create card */}
+                                <Animated animationIn="fadeInRightBig" animationOut="zoomOut" animationOutDuration="4000" isVisible={this.state.isCardVisible} >
 
-                                                // delete book by id
-                                                <Button
-                                                    key={`saved-delete-${book._id}`}
-                                                    data-id={book._id}
-                                                    data-deletebookindex={index}
-                                                    onClick={this.deleteBookByID}
-                                                >
-                                                    Delete
-                                                </Button >
+                                    {
 
-                                            ]
-                                        }
-                                    >
-                                        {/* display content information */}
-                                        <div className="row">
-                                            <div className="col-md-3  text-center m-auto">
-                                                <img
-                                                    className="mb-5"
-                                                    src={book.imglink} alt="Book Thumbnail" />
-                                            </div>
-                                            <div className="col-md-9">
-                                                <h6>{book.title}</h6>
-                                                <p>Author: {book.authors}</p>
-                                                <p>Rating: {book.rating}</p>
-                                                <p>Desc: {book.description}</p>
-                                            </div>
-                                        </div>
-                                    </Card >
-                                ))
-                            }
+                                        this.state.savedBooks.map((book, index) => (
+                                            <Card
+                                                className="blue-grey darken-1"
+                                                textClassName="white-text"
+                                                key={`saved-card-${book._id}`}
 
-                        </Container>
+                                                // material-ui card action buttons
+                                                actions={
+                                                    [
+                                                        <a
+                                                            key={`view-link-${book._id}`}
+                                                            href={book.infolink}
+                                                            target="_blank"
+                                                            rel="noopener noreferrer">
+                                                            <Button
+                                                                key={`saved-view-${book._id}`}
+                                                                className="view-text">
+                                                                <Icon key={`icon-view-${book.id}`} left>find_in_page</Icon>
+                                                                View
+                                                            </Button>
+                                                        </a>
+                                                        ,
 
-                        : 'nothing'
-                }
+                                                        // delete book by id
+                                                        <Button
+                                                            key={`saved-delete-${book._id}`}
+                                                            className="delete-text"
+                                                            data-id={book._id}
+                                                            data-deletebookindex={index}
+                                                            onClick={this.deleteBookByID}>
+                                                            <Icon key={`icon-delete-${book._id}`} left>delete</Icon>
+                                                            Delete
+                                                        </Button >
 
-            </Container>
+                                                    ]
+                                                }
+                                            >
+                                                {/* display content information */}
+                                                <div className="row">
+                                                    <div className="col-md-3 text-center m-auto">
+                                                        <img
+                                                            className="mb-5"
+                                                            src={book.imglink}
+                                                            alt="Book Thumbnail" />
+                                                    </div>
+                                                    <div className="col-md-9">
+                                                        <h6 className="p-2 sandybrown-text text-center">{book.title}</h6>
+                                                        <p className="text-center">Author: {book.author}</p>
+                                                        <p className="mb-4 text-center">Rating: {book.rating}</p>
+                                                        {book.description ? <p>{book.description}</p> : <p className="grey-text">No summary available</p>}
+                                                    </div>
+                                                </div>
+                                            </Card >
+
+                                        ))
+                                    }
+                                </Animated>
+
+                            </div>
+
+                            :
+                            <Animated animationIn="zoomIn" >
+                                <Card className="black-text">
+                                    There appears to be nothing here... Search for one!
+                            </Card>
+                            </Animated>
+
+                    }
+
+                </Container>
+            </>
         );
     };
 };
