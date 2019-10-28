@@ -28,6 +28,7 @@ export default class SearchPage extends Component {
         isSearchVisible: true,
         isCardVisible: true,
         isTyping: '',
+        hasError: false,
     };
 
     // on load, set message
@@ -39,6 +40,12 @@ export default class SearchPage extends Component {
             isCardVisible: true,
 
         });
+    };
+
+    // handle errors from bad search
+    componentDidCatch(error) {
+        this.setState({ hasError: true });
+
     };
 
     // toast notifications
@@ -78,12 +85,9 @@ export default class SearchPage extends Component {
                 message: 'View or Save a book below!',
                 isLoading: false,
             }))
-            .then(() => this.notifySuccess(`'${searchInput}' searched!`))
+            .then(() => this.notify(`'${searchInput}' searched!`))
             .catch(err => {
-                this.setState({
-                    isloading: false,
-                    message: 'No books found!',
-                })
+                this.setState({ hasError: true });
             });
     };
 
@@ -133,7 +137,6 @@ export default class SearchPage extends Component {
     render() {
         return (
             <>
-
                 <Animated
                     animationIn="fadeInDown"
                     animationOut="fadeOut"
@@ -196,7 +199,7 @@ export default class SearchPage extends Component {
 
 
                     {
-                        this.state.searchResults && this.state.searchResults.length > 0 ?
+                        !this.state.hasError && this.state.searchResults.length > 0 ?
 
                             // map through array of objects and create cards for each book
                             this.state.searchResults.map((book, index) => (
@@ -237,7 +240,7 @@ export default class SearchPage extends Component {
                                                         data-id={book.id}
                                                         data-title={book.volumeInfo.title}
                                                         data-author={book.volumeInfo.authors[0]}
-                                                        data-imglink={book.volumeInfo.imageLinks.smallThumbnail}
+                                                        data-imglink={book.volumeInfo.imageLinks.smallThumbnail ? book.volumeInfo.imageLinks.smallThumbnail : 'No image'}
                                                         data-rating={book.volumeInfo.averageRating ? book.volumeInfo.averageRating : 'No rating'}
                                                         data-description={book.volumeInfo.description}
                                                         data-infolink={book.volumeInfo.infoLink}
@@ -269,25 +272,26 @@ export default class SearchPage extends Component {
                                                     >
                                                         <h6 className="sandybrown-text text-center">{book.volumeInfo.title}</h6>
                                                         <hr />
-                                                        <p className="text-center">Author: {book.volumeInfo.authors[0]}</p>
+                                                        <p className="text-center">Author: {book.volumeInfo.authors[0] || 'N/A'}</p>
                                                         <p className="text-center">Rating: {book.volumeInfo.averageRating ? book.volumeInfo.averageRating : 'N/A'}</p>
                                                     </Card>
 
-                                                    {book.volumeInfo.description ?
-                                                        <Card
-                                                            className="blue-grey darken-1"
-                                                            textClassName="white-text"
-                                                            key={`saved-card-info-${book._id}`}
-                                                        >
-                                                            {book.volumeInfo.description}
-                                                        </Card>
-                                                        :
-                                                        <Card
-                                                            className="blue-grey darken-1"
-                                                            textClassName="white-text"
-                                                            key={`saved-card-info-${book._id}`}
-                                                        >
-                                                            No summary available
+                                                    {
+                                                        book.volumeInfo.description ?
+                                                            <Card
+                                                                className="blue-grey darken-1"
+                                                                textClassName="white-text"
+                                                                key={`saved-card-info-${book._id}`}
+                                                            >
+                                                                {book.volumeInfo.description}
+                                                            </Card>
+                                                            :
+                                                            <Card
+                                                                className="blue-grey darken-1"
+                                                                textClassName="white-text"
+                                                                key={`saved-card-info-${book._id}`}
+                                                            >
+                                                                No summary available
                                                         </Card>
                                                     }
 
@@ -298,29 +302,31 @@ export default class SearchPage extends Component {
                                 </div>
 
                             ))
-
                             :
+                            <div>
 
-                            <Animated animationIn="fadeInDown" animationOut="zoomOutUp" animationInDelay={1800}>
+                                <Animated animationIn="fadeInDown" animationOut="zoomOutUp" animationInDelay={1800}>
 
-                                {/* change message depending on state of text area */}
-                                <Card
-                                    className="blue-grey darken-4"
-                                >
-                                    <Animated
-                                        className="white-text"
-                                        animationIn="fadeInLeft"
-                                        animationInDelay={1400}
-                                        animationOut="flash"
-                                        animationOutDelay={500}
-                                        isVisible={this.state.searchInput.length > 0 ? false : true}>
-                                        {this.state.searchInput.length > 0 ?
-                                            'Press SUBMIT when ready' :
-                                            'No search results to display. Try searching for a book!'}
-                                    </Animated>
-                                </Card>
+                                    {/* change message depending on state of text area */}
+                                    <Card
+                                        className="blue-grey darken-4"
+                                    >
+                                        <Animated
+                                            className="white-text"
+                                            animationIn="fadeInLeft"
+                                            animationInDelay={1400}
+                                            animationOut="flash"
+                                            animationOutDelay={500}
+                                            isVisible={this.state.searchInput.length > 0 ? false : true}>
+                                            {this.state.searchInput.length > 0 ?
+                                                'Press SUBMIT when ready' :
+                                                'No search results to display. Try searching for a book!'}
+                                        </Animated>
+                                    </Card>
 
-                            </Animated>
+                                </Animated>
+                            </div>
+
                     }
 
                 </Container>
