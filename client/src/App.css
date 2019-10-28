@@ -52,6 +52,10 @@ a, a:hover {
   color: white;
 }
 
+.book-image {
+  max-width: 125px;
+}
+
 .book-image:hover {
   border-radius: 10px;
   opacity: 1;
