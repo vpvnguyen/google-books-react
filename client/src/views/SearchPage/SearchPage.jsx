@@ -91,7 +91,7 @@ export default class SearchPage extends Component {
         const searchInput = this.state.searchInput.trim();
 
         if (searchInput === '') {
-            this.notify('Try typing in a book!');
+            return this.notify('Try typing in a book!');
         }
 
         // get books from google api
@@ -100,7 +100,6 @@ export default class SearchPage extends Component {
 
                 // validate results
                 const validated = this.validateResults(res.data.items);
-                console.log('VALIDATED: ' + JSON.stringify(validated))
 
                 this.setState({
                     searchResults: validated,
@@ -108,8 +107,6 @@ export default class SearchPage extends Component {
                     isLoading: false,
                 });
 
-                console.log('state')
-                console.log(this.state.searchResults)
             })
             .then(() => this.notify(`'${searchInput}' searched!`))
             .catch(err => {
