@@ -6,7 +6,7 @@ const bookSchema = new Schema({
     // using mongoose, _id is already incrementally defined
     bookID: { type: String, require: true },
     title: { type: String, require: true },
-    author: { type: String, require: true },
+    author: String,
     description: String,
     imglink: String,
     rating: String,
