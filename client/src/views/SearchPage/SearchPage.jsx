@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 
-// style
-import './SearchPage.css';
+// material ui
 import { Container, Row, Col, TextInput, Button, Icon, Card } from 'react-materialize';
 
 // animate
@@ -205,7 +204,7 @@ export default class SearchPage extends Component {
                                     {/* each book */}
                                     <Animated animationIn="fadeInLeftBig" animationOut="fadeOutLeftBig">
                                         <Card
-                                            className="blue-grey darken-2"
+                                            className="blue-grey darken-3"
                                             textClassName="white-text"
                                             key={`result-card-${book.id}`}
                                             actions={
@@ -257,16 +256,41 @@ export default class SearchPage extends Component {
                                             <div className="row">
                                                 <div className="col-md-3 text-center m-auto">
                                                     <img
-                                                        className="mb-5"
+                                                        className="book-image mb-5"
                                                         src={book.volumeInfo.imageLinks.smallThumbnail}
                                                         alt="Book Thumbnail"
                                                     />
                                                 </div>
                                                 <div className="col-md-9">
-                                                    <h6 className="p-2 sandybrown-text text-center">{book.volumeInfo.title}</h6>
-                                                    <p className="text-center">Author: {book.volumeInfo.authors[0]}</p>
-                                                    <p className="mb-4 text-center">Rating: {book.volumeInfo.averageRating ? book.volumeInfo.averageRating : 'N/A'}</p>
-                                                    {book.volumeInfo.description ? <p>{book.volumeInfo.description}</p> : <p className="grey-text">No summary available</p>}
+                                                    <Card
+                                                        className="blue-grey darken-1"
+                                                        textClassName="white-text"
+                                                        key={`saved-card-info-${book._id}`}
+                                                    >
+                                                        <h6 className="sandybrown-text text-center">{book.volumeInfo.title}</h6>
+                                                        <hr />
+                                                        <p className="text-center">Author: {book.volumeInfo.authors[0]}</p>
+                                                        <p className="text-center">Rating: {book.volumeInfo.averageRating ? book.volumeInfo.averageRating : 'N/A'}</p>
+                                                    </Card>
+
+                                                    {book.volumeInfo.description ?
+                                                        <Card
+                                                            className="blue-grey darken-1"
+                                                            textClassName="white-text"
+                                                            key={`saved-card-info-${book._id}`}
+                                                        >
+                                                            {book.volumeInfo.description}
+                                                        </Card>
+                                                        :
+                                                        <Card
+                                                            className="blue-grey darken-1"
+                                                            textClassName="white-text"
+                                                            key={`saved-card-info-${book._id}`}
+                                                        >
+                                                            No summary available
+                                                        </Card>
+                                                    }
+
                                                 </div>
                                             </div>
                                         </Card >
@@ -280,9 +304,11 @@ export default class SearchPage extends Component {
                             <Animated animationIn="fadeInDown" animationOut="zoomOutUp" animationInDelay={1800}>
 
                                 {/* change message depending on state of text area */}
-                                <Card >
+                                <Card
+                                    className="blue-grey darken-4"
+                                >
                                     <Animated
-                                        className="black-text"
+                                        className="white-text"
                                         animationIn="fadeInLeft"
                                         animationInDelay={1400}
                                         animationOut="flash"

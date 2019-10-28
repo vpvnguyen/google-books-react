@@ -1,8 +1,5 @@
 import React, { Component } from 'react';
 
-// style
-import './SavedPage.css';
-
 //material-ui
 import { Container } from 'react-materialize';
 import { Card, Button, Icon } from 'react-materialize';
@@ -97,7 +94,11 @@ export default class SavedPage extends Component {
     render() {
         return (
             <>
-                <Animated animationIn="fadeInDown" animationOut="fadeOut" isVisible={this.state.isHeaderVisible}>
+                <Animated
+                    animationIn="fadeInDown"
+                    animationOut="fadeOut"
+                    isVisible={this.state.isHeaderVisible}
+                >
                     <Header
                         message={this.state.message}
                         isSavedPageLoading={this.state.isSavedPageLoading}
@@ -105,6 +106,7 @@ export default class SavedPage extends Component {
                     />
                 </Animated>
 
+                {/* show preloader depending on action */}
                 {this.state.isSavedPageLoading ? <Preloader /> : null}
 
                 <Container>
@@ -116,13 +118,19 @@ export default class SavedPage extends Component {
 
                             <div>
                                 {/* map through array of objects and create card */}
-                                <Animated animationIn="fadeInRightBig" animationOut="zoomOut" animationOutDuration="4000" isVisible={this.state.isCardVisible} >
+                                <Animated
+                                    animationIn="fadeInRightBig"
+                                    animationOut="zoomOut"
+                                    animationOutDuration={4000}
+                                    isVisible={this.state.isCardVisible}
+                                >
 
                                     {
 
                                         this.state.savedBooks.map((book, index) => (
+
                                             <Card
-                                                className="blue-grey darken-1"
+                                                className="blue-grey darken-3"
                                                 textClassName="white-text"
                                                 key={`saved-card-${book._id}`}
 
@@ -143,6 +151,7 @@ export default class SavedPage extends Component {
                                                                 View
                                                             </Button>
                                                         </a>
+
                                                         ,
 
                                                         // delete book by id
@@ -166,15 +175,39 @@ export default class SavedPage extends Component {
                                                 <div className="row">
                                                     <div className="col-md-3 text-center m-auto">
                                                         <img
-                                                            className="mb-5"
+                                                            className="book-image mb-5"
                                                             src={book.imglink}
                                                             alt="Book Thumbnail" />
                                                     </div>
                                                     <div className="col-md-9">
-                                                        <h6 className="p-2 sandybrown-text text-center">{book.title}</h6>
-                                                        <p className="text-center">Author: {book.author}</p>
-                                                        <p className="mb-4 text-center">Rating: {book.rating}</p>
-                                                        {book.description ? <p>{book.description}</p> : <p className="grey-text">No summary available</p>}
+                                                        <Card
+                                                            className="blue-grey darken-1"
+                                                            textClassName="white-text"
+                                                            key={`saved-card-info-${book._id}`}
+                                                        >
+                                                            <h6 className="sandybrown-text text-center">{book.title}</h6>
+                                                            <hr className="m-4" />
+                                                            <p>Author: {book.author}</p>
+                                                            <p>Rating: {book.rating}</p>
+                                                        </Card>
+
+                                                        {book.description ?
+                                                            <Card
+                                                                className="blue-grey darken-1"
+                                                                textClassName="white-text"
+                                                                key={`saved-card-info-${book._id}`}
+                                                            >
+                                                                {book.description}
+                                                            </Card>
+                                                            :
+                                                            <Card
+                                                                className="blue-grey darken-1"
+                                                                textClassName="grey-text"
+                                                                key={`saved-card-info-${book._id}`}
+                                                            >
+                                                                No summary available
+                                                            </Card>
+                                                        }
                                                     </div>
                                                 </div>
                                             </Card >
@@ -186,12 +219,12 @@ export default class SavedPage extends Component {
                             </div>
 
                             :
+
                             <Animated animationIn="zoomIn" >
                                 <Card className="black-text">
                                     There appears to be nothing here... Search for one!
-                            </Card>
+                                </Card>
                             </Animated>
-
                     }
 
                 </Container>
