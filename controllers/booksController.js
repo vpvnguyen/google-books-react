@@ -49,7 +49,7 @@ router.get('/getSavedBooks/', (req, res) => {
 router.delete('/deleteBook/:id', (req, res) => {
 
     Book.findByIdAndRemove(req.params.id)
-        .then((deletedBookResponse) => {
+        .then(deletedBookResponse => {
             console.log('\n hererere')
             console.log(deletedBookResponse.title)
             res.send(deletedBookResponse)
