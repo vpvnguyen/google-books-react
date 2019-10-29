@@ -5,6 +5,9 @@ import { Container } from 'react-materialize';
 import { Card, Button, Icon } from 'react-materialize';
 import { Animated } from 'react-animated-css';
 
+// react-scroll
+import { animateScroll as scroll } from 'react-scroll';
+
 // toast
 import { toast } from 'react-toastify';
 
@@ -90,6 +93,7 @@ export default class SavedPage extends Component {
                 });
 
                 this.notify(`[${this.state.deleteBookTitle}] has been deleted...`);
+                scroll.scrollToTop();
 
             })
             .catch(err => console.log(err));
