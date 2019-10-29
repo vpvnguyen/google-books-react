@@ -1,9 +1,7 @@
 import React, { Component } from 'react';
 
-// material ui
-import { Container, ProgressBar } from 'react-materialize';
-
 // style
+import { Container, ProgressBar } from 'react-materialize';
 import './Preloader.css';
 
 export default class Preloader extends Component {

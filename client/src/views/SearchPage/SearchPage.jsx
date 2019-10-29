@@ -1,13 +1,9 @@
 import React, { Component } from 'react';
 
-// material ui
+// style
 import { Container, Row, Col, TextInput, Button, Icon, Card } from 'react-materialize';
-
-// animate
 import { Animated } from 'react-animated-css';
 import { toast } from 'react-toastify';
-
-// ES6 Imports
 import { animateScroll as scroll } from 'react-scroll';
 
 // components

@@ -1,14 +1,9 @@
 import React, { Component } from 'react';
 
-//material-ui
-import { Container } from 'react-materialize';
-import { Card, Button, Icon } from 'react-materialize';
+// style
+import { Container, Card, Button, Icon } from 'react-materialize';
 import { Animated } from 'react-animated-css';
-
-// react-scroll
 import { animateScroll as scroll } from 'react-scroll';
-
-// toast
 import { toast } from 'react-toastify';
 
 // components

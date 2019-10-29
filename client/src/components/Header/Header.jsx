@@ -2,11 +2,10 @@ import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 
 // style
-import './Header.css';
-
-// material ui
 import { Container, Row, Col, Card, Button, Icon } from 'react-materialize';
 import { toast } from 'react-toastify';
+import './Header.css';
+
 export default class Header extends Component {
 
     toastId = null;
