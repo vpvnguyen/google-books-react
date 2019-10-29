@@ -7,6 +7,9 @@ import { Container, Row, Col, TextInput, Button, Icon, Card } from 'react-materi
 import { Animated } from 'react-animated-css';
 import { toast } from 'react-toastify';
 
+// ES6 Imports
+import { animateScroll as scroll } from 'react-scroll';
+
 // components
 import Header from '../../components/Header/Header.jsx';
 import Preloader from '../../components/Preloader/Preloader.jsx';
@@ -32,17 +35,17 @@ export default class SearchPage extends Component {
     // on load, set message
     componentDidMount() {
         this.setState({
+            searchInput: '',
             isLoading: false,
             pageLoaded: '/',
             message: 'Search and save books',
             isCardVisible: true,
-
         });
     };
 
     // toast notifications
     toastId = null;
-    notify = (toastMessage) => this.toastId = toast(toastMessage, {
+    notify = toastMessage => this.toastId = toast(toastMessage, {
         position: toast.POSITION.BOTTOM_RIGHT,
         className: "blue-grey darken-4 toast-whitetext text-center"
     });
@@ -51,12 +54,13 @@ export default class SearchPage extends Component {
     handleChange = event => {
         this.setState({
             searchInput: event.target.value,
+            isLoading: this.state.searchInput.length > 1 ? true : false,
         });
     };
 
     // validate google books search results; set placeholders if key does not exist
     validateResults = searchResults => {
-        return searchResults.map((items) => {
+        return searchResults.map(items => {
             items = {
                 id: items.id,
                 title: items.volumeInfo.title,
@@ -83,6 +87,7 @@ export default class SearchPage extends Component {
 
         // check if search is empty
         if (searchInput === '') {
+            this.setState({ isLoading: false });
             return this.notify('Try typing in a book!');
         }
 
@@ -145,7 +150,10 @@ export default class SearchPage extends Component {
                 });
 
             })
-            .then(() => this.notify(`'${saveBookData.title}' has been saved!`));
+            .then(() => {
+                this.notify(`'${saveBookData.title}' has been saved!`);
+                scroll.scrollToTop();
+            });
     };
 
     render() {
@@ -161,16 +169,18 @@ export default class SearchPage extends Component {
                         isLoading={this.state.isLoading}
                         pageLoaded={this.state.pageLoaded}
                     />
-                    {/* preloader display depending on load */}
-                    {this.state.isLoading ? <Preloader /> : null}
                 </Animated>
+
+                {/* preloader display depending on load */}
+                {this.state.isLoading ? <Preloader /> : null}
 
                 <Container>
 
                     <Animated
                         animationIn="fadeInDownBig"
                         animationOut="fadeOut"
-                        isVisible={this.state.isSearchVisible}>
+                        isVisible={this.state.isSearchVisible}
+                    >
                         <form>
                             <Row>
                                 <Col m={12} s={12}>
@@ -224,8 +234,11 @@ export default class SearchPage extends Component {
                             this.state.searchResults.map((book, index) => (
 
                                 <Animated
-                                    animationIn="fadeInLeftBig"
+                                    animationIn="fadeInUp"
                                     animationOut="fadeOutLeftBig"
+                                    animationOutDuration={5000}
+                                    isVisible={this.state.isCardVisible}
+                                    key={`result-animate-${book.id}`}
                                 >
                                     <Card
                                         className="blue-grey darken-3"
@@ -266,7 +279,7 @@ export default class SearchPage extends Component {
                                                     data-description={book.description}
                                                     data-infolink={book.infoLink}
                                                     data-bookindex={index}
-                                                    tooltip="Save Book"
+                                                    tooltip={`Save book: [${book.title}]!`}
                                                     tooltipOptions={{ position: 'top' }}
                                                     onClick={this.saveBook}
                                                 >
@@ -317,7 +330,8 @@ export default class SearchPage extends Component {
                             <Animated
                                 animationIn="fadeInDown"
                                 animationOut="zoomOutUp"
-                                animationInDelay={1800}
+                                animationInDelay={2000}
+                                isVisible={this.state.isCardVisible}
                             >
 
                                 {/* change message depending on state of text area */}
@@ -326,8 +340,8 @@ export default class SearchPage extends Component {
                                 >
                                     <Animated
                                         className="white-text"
-                                        animationIn="fadeInLeft"
-                                        animationInDelay={1400}
+                                        animationIn="fadeInUp"
+                                        animationInDelay={2200}
                                         animationOut="flash"
                                         animationOutDelay={500}
                                         isVisible={this.state.searchInput.length > 0 ? false : true}
