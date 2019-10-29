@@ -12,7 +12,6 @@ router.get('/getBooks', (req, res) => {
             res.send(books);
         })
         .catch(err => {
-            console.log(err);
             res.send('No Books Found');
         });
 });
@@ -22,7 +21,6 @@ router.post('/saveBook/', (req, res) => {
 
     Book.create(req.body)
         .then(savedBookReponse => {
-            console.log(`POST /saveBook/ SUCCESS: ${savedBookReponse}`);
             res.send(savedBookReponse)
         })
         .catch(err => {
@@ -40,7 +38,7 @@ router.get('/getSavedBooks/', (req, res) => {
             res.send(books);
         })
         .catch(err => {
-            console.log(err);
+            console.log(`GET /getSavedBooks/ ERROR: ${err}`);
             res.sendStatus(500);
         });
 });
@@ -50,12 +48,10 @@ router.delete('/deleteBook/:id', (req, res) => {
 
     Book.findByIdAndRemove(req.params.id)
         .then(deletedBookResponse => {
-            console.log('\n hererere')
-            console.log(deletedBookResponse.title)
             res.send(deletedBookResponse)
         })
         .catch(err => {
-            console.log(err)
+            console.log(`DELETE /deleteBook/ ERROR: ${err}`)
             res.sendStatus(500);
         });
 });

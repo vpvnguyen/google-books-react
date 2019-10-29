@@ -8,8 +8,8 @@ import './Header.css';
 
 export default class Header extends Component {
 
+    // toast notifications
     toastId = null;
-
     notifyHelp = () => this.toastId = toast.info('Need some help?', { position: toast.POSITION.TOP_RIGHT });
 
     render() {
@@ -23,7 +23,7 @@ export default class Header extends Component {
                             textClassName='white-text'
                             title='Google Books Search'
                             actions={[
-                                
+
                                 <Link to='/' key={'/'} >
                                     <Button
                                         className={this.props.pageLoaded === '/' ? 'focused' : 'white-text'}
@@ -31,6 +31,7 @@ export default class Header extends Component {
                                         tooltipOptions={{ position: 'bottom' }}
                                     >
                                         Search For Books
+
                                         <Icon left>search</Icon >
                                     </Button >
                                 </Link >
@@ -44,6 +45,7 @@ export default class Header extends Component {
                                         tooltipOptions={{ position: 'bottom' }}
                                     >
                                         All Saved Books
+
                                         <Icon left>bookmark_border</Icon >
                                     </Button >
                                 </Link >
@@ -62,6 +64,7 @@ export default class Header extends Component {
                                         tooltipOptions={{ position: 'bottom' }}
                                     >
                                         Github
+                                        
                                         <Icon left>code</Icon >
                                     </Button >
                                 </a>

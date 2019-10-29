@@ -196,9 +196,12 @@ export default class SavedPage extends Component {
                                                     key={`saved-card-header-${book._id}`}
                                                 >
                                                     <h6 className='sandybrown-text text-center'>{book.title}</h6>
+                                                    
                                                     <hr className='m-4' />
+
                                                     <p>Author: {book.author}</p>
                                                     <p>Rating: {book.rating}</p>
+
                                                 </Card >
 
                                                 <Card
