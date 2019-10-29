@@ -18,17 +18,16 @@ export default class SearchPage extends Component {
     state = {
         pageLoaded: '/',
         searchInput: '',
+        message: '',
         searchResults: [],
         isSearched: false,
         savedBookIndex: -1,
         isLoading: true,
-        message: '',
         isHeaderVisible: true,
         isSearchVisible: true,
         isCardVisible: true,
     };
 
-    // on load, set message
     componentDidMount() {
         this.setState({
             searchInput: '',
@@ -43,7 +42,7 @@ export default class SearchPage extends Component {
     toastId = null;
     notify = toastMessage => this.toastId = toast(toastMessage, {
         position: toast.POSITION.BOTTOM_RIGHT,
-        className: "blue-grey darken-4 toast-whitetext text-center"
+        className: 'blue-grey darken-4 toast-whitetext text-center'
     });
 
     // set user input
@@ -76,7 +75,7 @@ export default class SearchPage extends Component {
 
         this.setState({
             searchResults: [],
-            isloading: true
+            isloading: true,
         });
 
         const searchInput = this.state.searchInput.trim();
@@ -131,7 +130,7 @@ export default class SearchPage extends Component {
             .then(() => {
 
                 // remove saved book from search view
-                const newSearchList = []
+                const newSearchList = [];
 
                 this.state.searchResults.forEach((value, index) => {
                     if (index !== Number(this.state.savedBookIndex)) {
@@ -147,7 +146,7 @@ export default class SearchPage extends Component {
 
             })
             .then(() => {
-                this.notify(`'${saveBookData.title}' has been saved!`);
+                this.notify(`[${saveBookData.title}] has been saved!`);
                 scroll.scrollToTop();
             });
     };
@@ -155,9 +154,11 @@ export default class SearchPage extends Component {
     render() {
         return (
             <>
+
+                {/* header */}
                 <Animated
-                    animationIn="fadeInDown"
-                    animationOut="fadeOut"
+                    animationIn='fadeInDown'
+                    animationOut='fadeOut'
                     isVisible={this.state.isHeaderVisible}
                 >
                     <Header
@@ -165,63 +166,64 @@ export default class SearchPage extends Component {
                         isLoading={this.state.isLoading}
                         pageLoaded={this.state.pageLoaded}
                     />
-                </Animated>
+                </Animated >
 
                 {/* preloader display depending on load */}
                 {this.state.isLoading ? <Preloader /> : null}
 
-                <Container>
+                {/* render search page */}
+                <Container >
 
                     <Animated
-                        animationIn="fadeInDownBig"
-                        animationOut="fadeOut"
+                        animationIn='fadeInDownBig'
+                        animationOut='fadeOut'
                         isVisible={this.state.isSearchVisible}
                     >
                         <form>
-                            <Row>
-                                <Col m={12} s={12}>
+                            <Row >
+                                <Col m={12} s={12} >
 
                                     {/* search box */}
                                     <Card
                                         actions={[
                                             <Animated
-                                                animationIn="bounce"
+                                                animationIn='bounce'
                                                 animationInDelay={1000}
                                                 key={'search-box'}
                                             >
                                                 <Button
                                                     type='submit'
                                                     waves='light'
-                                                    tooltip="Search Book"
+                                                    tooltip='Search Book'
                                                     tooltipOptions={{ position: 'right' }}
                                                     onClick={this.getBooks}
                                                 >
                                                     Submit
-                                            <Icon right>send</Icon>
-                                                </Button>
-                                            </Animated>
+                                            <Icon right>send</Icon >
+                                                </Button >
 
+                                            </Animated >
                                         ]}
                                     >
 
+                                        {/* search field */}
                                         <Animated
-                                            animationIn="fadeInLeft"
+                                            animationIn='fadeInLeft'
                                             animationInDelay={100}
                                         >
-                                            {/* search field */}
                                             <TextInput
                                                 label='Type a book here...'
                                                 value={this.state.searchInput}
                                                 onChange={this.handleChange}
                                             />
-                                        </Animated>
+                                        </Animated >
 
-                                    </Card>
-                                </Col>
-                            </Row>
+                                    </Card >
+
+                                </Col >
+                            </Row >
                         </form>
-                    </Animated>
-
+                    </Animated >
 
                     {
                         this.state.searchResults.length > 0 ?
@@ -230,43 +232,46 @@ export default class SearchPage extends Component {
                             this.state.searchResults.map((book, index) => (
 
                                 <Animated
-                                    animationIn="fadeInUp"
-                                    animationOut="fadeOutLeftBig"
+                                    animationIn='fadeInUp'
+                                    animationOut='fadeOutLeftBig'
                                     animationOutDuration={5000}
                                     isVisible={this.state.isCardVisible}
                                     key={`result-animate-${book.id}`}
                                 >
                                     <Card
-                                        className="blue-grey darken-3"
-                                        textClassName="white-text"
+                                        className='blue-grey darken-3'
+                                        textClassName='white-text'
                                         key={`result-card-${book.id}`}
                                         actions={
                                             [
                                                 <a
                                                     key={`view-link-${book.id}`}
-                                                    className="view-button"
+                                                    className='view-button'
                                                     href={book.infoLink}
-                                                    target="_blank"
-                                                    rel="noopener noreferrer"
+                                                    target='_blank'
+                                                    rel='noopener noreferrer'
                                                 >
+
                                                     {/* link to google books */}
                                                     <Button
                                                         key={`result-view-${book.id}`}
-                                                        className="view-text"
-                                                        tooltip="Link to Book"
+                                                        className='view-text'
+                                                        tooltip='Link to Book'
                                                         tooltipOptions={{ position: 'top' }}
                                                     >
                                                         View
-                                                        <Icon key={`icon-view-${book.id}`} left>find_in_page</Icon>
 
-                                                    </Button>
+                                                        <Icon key={`icon-view-${book.id}`} left>find_in_page</Icon >
+                                                    </Button >
+
                                                 </a>
+
                                                 ,
 
                                                 // pass dataset to API model; save book by ID
                                                 <Button
                                                     key={`result-save-${book.id}`}
-                                                    className="save-text"
+                                                    className='save-text'
                                                     data-id={book.id}
                                                     data-title={book.title}
                                                     data-author={book.author}
@@ -280,77 +285,92 @@ export default class SearchPage extends Component {
                                                     onClick={this.saveBook}
                                                 >
                                                     Save
-                                                    <Icon key={`icon-save-${book.id}`} left>save</Icon>
+
+                                                    <Icon key={`icon-save-${book.id}`} left>save</Icon >
                                                 </Button >
                                             ]
                                         }
                                     >
+                                        
                                         {/* display book info */}
-                                        <div className="row">
-                                            <div className="col-md-3 text-center m-auto">
+                                        <div className='row'>
+                                            <div className='col-md-3 text-center m-auto'>
                                                 <img
-                                                    className="book-image mb-5"
+                                                    className='book-image mb-5'
                                                     src={book.imgLink.smallThumbnail}
-                                                    alt="Book Thumbnail"
+                                                    alt='Book Thumbnail'
                                                 />
                                             </div>
-                                            <div className="col-md-9">
+                                            <div className='col-md-9'>
+
                                                 <Card
-                                                    className="blue-grey darken-1"
-                                                    textClassName="white-text"
+                                                    className='blue-grey darken-1'
+                                                    textClassName='white-text'
                                                     key={`saved-card-header-${book.id}`}
                                                 >
-                                                    <h6 className="sandybrown-text text-center">{book.title}</h6>
+                                                    <h6 className='sandybrown-text text-center'>
+                                                        {book.title}
+                                                    </h6>
+
                                                     <hr />
-                                                    <p className="text-center">Author: {book.author}</p>
-                                                    <p className="text-center">Rating: {book.rating}</p>
-                                                </Card>
+
+                                                    <p className='text-center'>
+                                                        Author: {book.author}
+                                                    </p>
+
+                                                    <p className='text-center'>
+                                                        Rating: {book.rating}
+                                                    </p>
+
+                                                </Card >
 
                                                 <Card
-                                                    className="blue-grey darken-1"
-                                                    textClassName="white-text"
+                                                    className='blue-grey darken-1'
+                                                    textClassName='white-text'
                                                     key={`saved-card-info-${book.id}`}
                                                 >
-                                                    {book.description}
-                                                </Card>
 
+                                                    {book.description}
+
+                                                </Card >
 
                                             </div>
                                         </div>
                                     </Card >
-                                </Animated>
+
+                                </Animated >
                             ))
 
                             :
 
+                            // change message depending on state of user input
                             <Animated
-                                animationIn="fadeInDown"
-                                animationOut="zoomOutUp"
+                                animationIn='fadeInDown'
+                                animationOut='zoomOutUp'
                                 animationInDelay={2000}
                                 isVisible={this.state.isCardVisible}
                             >
-
-                                {/* change message depending on state of text area */}
                                 <Card
-                                    className="blue-grey darken-4"
+                                    className='blue-grey darken-4'
                                 >
                                     <Animated
-                                        className="white-text"
-                                        animationIn="fadeInUp"
+                                        className='white-text'
+                                        animationIn='fadeInUp'
                                         animationInDelay={2200}
-                                        animationOut="flash"
+                                        animationOut='flash'
                                         animationOutDelay={500}
                                         isVisible={this.state.searchInput.length > 0 ? false : true}
                                     >
-                                        {this.state.searchInput.length > 0 ? 'Press SUBMIT when ready' : 'No search results to display. Try searching for a book!'}
-                                    </Animated>
-                                </Card>
-
-                            </Animated>
-
+                                        {
+                                            this.state.searchInput.length > 0 ? 
+                                            'Press SUBMIT when ready' : 'No search results to display. Try searching for a book!'
+                                        }
+                                    </Animated >
+                                </Card >
+                            </Animated >
                     }
 
-                </Container>
+                </Container >
             </>
         );
     };

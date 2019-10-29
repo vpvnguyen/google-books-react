@@ -12,12 +12,12 @@ nav {
   background-color: #283149;
 }
 
-#mobile-nav {
-  background-color: #dbedf3;
-}
-
 a, a:hover {
   text-decoration: none;
+}
+
+#mobile-nav {
+  background-color: #dbedf3;
 }
 
 .sandybrown-text {
@@ -63,4 +63,3 @@ a, a:hover {
   cursor: pointer;
   box-shadow: 0 3px 6px rgba(0,0,0,.16), 0 3px 6px rgba(0,0,0,.23);
 }
-

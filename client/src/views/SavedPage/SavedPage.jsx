@@ -20,17 +20,17 @@ export default class SavedPage extends Component {
         savedBooks: [],
         deleteBookIndex: -1,
         deleteBookTitle: '',
-        isSavedPageLoading: false,
         message: '',
+        isSavedPageLoading: false,
         isCardVisible: true,
         isHeaderVisible: true,
     };
 
     // toast notifications
     toastId = null;
-    notify = (toastMessage) => this.toastId = toast(toastMessage, {
+    notify = toastMessage => this.toastId = toast(toastMessage, {
         position: toast.POSITION.BOTTOM_RIGHT,
-        className: "blue-grey darken-4 toast-whitetext text-center"
+        className: 'blue-grey darken-4 toast-whitetext text-center'
     });
 
     // on load, get saved books from mongodb
@@ -69,6 +69,7 @@ export default class SavedPage extends Component {
             isCardVisible: false,
         });
 
+        // DELETE book by ID
         API.deleteBookByID(event.target.dataset.id)
             .then(() => {
 
@@ -98,9 +99,11 @@ export default class SavedPage extends Component {
     render() {
         return (
             <>
+
+                {/* header */}
                 <Animated
-                    animationIn="fadeInDown"
-                    animationOut="fadeOut"
+                    animationIn='fadeInDown'
+                    animationOut='fadeOut'
                     isVisible={this.state.isHeaderVisible}
                 >
                     <Header
@@ -108,12 +111,12 @@ export default class SavedPage extends Component {
                         isSavedPageLoading={this.state.isSavedPageLoading}
                         pageLoaded={this.state.pageLoaded}
                     />
-                </Animated>
+                </Animated >
 
                 {/* show preloader depending on action */}
                 {this.state.isSavedPageLoading ? <Preloader /> : null}
 
-                <Container>
+                <Container >
 
                     {/* check if this.state.savedBooks has data, render to dom */}
 
@@ -122,8 +125,8 @@ export default class SavedPage extends Component {
                         <div>
                             {/* map through array of objects and create card */}
                             <Animated
-                                animationIn="fadeInRightBig"
-                                animationOut="zoomOut"
+                                animationIn='fadeInRightBig'
+                                animationOut='zoomOut'
                                 animationOutDuration={4000}
                                 isVisible={this.state.isCardVisible}
                             >
@@ -131,26 +134,30 @@ export default class SavedPage extends Component {
                                 {this.state.savedBooks.map((book, index) => (
 
                                     <Card
-                                        className="blue-grey darken-3"
-                                        textClassName="white-text"
+                                        className='blue-grey darken-3'
+                                        textClassName='white-text'
                                         key={`saved-card-${book._id}`}
 
-                                        // material-ui card action buttons
+                                        // action buttons
                                         actions={
                                             [
+                                                // link to book
                                                 <a
                                                     key={`view-link-${book._id}`}
                                                     href={book.infolink}
-                                                    target="_blank"
-                                                    rel="noopener noreferrer">
+                                                    target='_blank'
+                                                    rel='noopener noreferrer'
+                                                >
+
                                                     <Button
                                                         key={`saved-view-${book._id}`}
-                                                        className="view-text"
-                                                        tooltip="Link to Book"
-                                                        tooltipOptions={{ position: 'top' }}>
-                                                        <Icon key={`icon-view-${book.id}`} left>find_in_page</Icon>
+                                                        className='view-text'
+                                                        tooltip='Link to Book'
+                                                        tooltipOptions={{ position: 'top' }}
+                                                    >
+                                                        <Icon key={`icon-view-${book.id}`} left>find_in_page</Icon >
                                                         View
-                                                            </Button>
+                                                    </Button >
                                                 </a>
 
                                                 ,
@@ -158,70 +165,71 @@ export default class SavedPage extends Component {
                                                 // delete book by id
                                                 <Button
                                                     key={`saved-delete-${book._id}`}
-                                                    className="delete-text"
+                                                    className='delete-text'
                                                     data-id={book._id}
                                                     data-title={book.title}
                                                     data-deletebookindex={index}
-                                                    tooltip="Delete Book"
+                                                    tooltip='Delete Book'
                                                     tooltipOptions={{ position: 'top' }}
                                                     onClick={this.deleteBookByID}
                                                 >
-                                                    <Icon key={`icon-delete-${book._id}`} left>delete</Icon>
+                                                    <Icon key={`icon-delete-${book._id}`} left>delete</Icon >
                                                     Delete
-                                                        </Button >
-
+                                                </Button >
                                             ]
                                         }
                                     >
                                         {/* display content information */}
-                                        <div className="row">
-                                            <div className="col-md-3 text-center m-auto">
+                                        <div className='row'>
+                                            <div className='col-md-3 text-center m-auto'>
                                                 <img
-                                                    className="book-image mb-5"
+                                                    className='book-image mb-5'
                                                     src={book.imglink}
-                                                    alt="Book Thumbnail"
+                                                    alt='Book Thumbnail'
                                                 />
                                             </div>
-                                            <div className="col-md-9">
-                                                <Card
-                                                    className="blue-grey darken-1"
-                                                    textClassName="white-text"
-                                                    key={`saved-card-header-${book._id}`}
-                                                >
-                                                    <h6 className="sandybrown-text text-center">{book.title}</h6>
-                                                    <hr className="m-4" />
-                                                    <p>Author: {book.author}</p>
-                                                    <p>Rating: {book.rating}</p>
-                                                </Card>
+                                            <div className='col-md-9'>
 
                                                 <Card
-                                                    className="blue-grey darken-1"
-                                                    textClassName="white-text"
+                                                    className='blue-grey darken-1'
+                                                    textClassName='white-text'
+                                                    key={`saved-card-header-${book._id}`}
+                                                >
+                                                    <h6 className='sandybrown-text text-center'>{book.title}</h6>
+                                                    <hr className='m-4' />
+                                                    <p>Author: {book.author}</p>
+                                                    <p>Rating: {book.rating}</p>
+                                                </Card >
+
+                                                <Card
+                                                    className='blue-grey darken-1'
+                                                    textClassName='white-text'
                                                     key={`saved-card-info-${book._id}`}
                                                 >
                                                     {book.description}
-                                                </Card>
+                                                </Card >
 
                                             </div>
                                         </div>
                                     </Card >
 
                                 ))}
-                            </Animated>
+
+                            </Animated >
 
                         </div>
 
                         :
 
-                        // if there are no data in array, render this component
-                        <Animated animationIn="zoomIn" >
-                            <Card className="black-text">
+                        // if no content, render this component
+                        <Animated animationIn='zoomIn' >
+                            <Card className='black-text' >
                                 There appears to be nothing here... Search for one!
-                                </Card>
-                        </Animated>
+                            </Card >
+                        </Animated >
                     }
 
-                </Container>
+                </Container >
             </>
         );
     };

@@ -1,15 +1,15 @@
-import React, { Component } from "react";
+import React, { Component } from 'react';
 
 // style
 import 'bootstrap/dist/css/bootstrap.min.css';
-import "./App.css";
+import './App.css';
 
 // toast
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 // react router
-import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
+import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 
 // components
 import SearchPage from './views/SearchPage/SearchPage.jsx';
@@ -27,12 +27,12 @@ export default class App extends Component {
     return (
       <>
 
-        <Router>
-          <Switch>
-            <Route exact path="/" component={SearchPage} />
-            <Route exact path="/saved" component={SavedPage} />
-          </Switch>
-        </Router>
+        <Router >
+          <Switch >
+            <Route exact path='/' component={SearchPage} />
+            <Route exact path='/saved' component={SavedPage} />
+          </Switch >
+        </Router >
 
       </>
     );

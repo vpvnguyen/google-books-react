@@ -8,9 +8,9 @@ export default class Preloader extends Component {
 
     render() {
         return (
-            <Container>
-                <ProgressBar className="preloader-bar" />
-            </Container>
+            <Container >
+                <ProgressBar className='preloader-bar' />
+            </Container >
         );
     };
 };
