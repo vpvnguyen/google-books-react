@@ -24,7 +24,7 @@ export default class Header extends Component {
                             textClassName="white-text"
                             title="Google Books Search"
                             actions={[
-                                <Link to="/">
+                                <Link to="/" key={'/'}>
                                     <Button
                                         className={this.props.pageLoaded === '/' ? 'focused' : 'white-text'}
                                         tooltip="Go to Search Page"
@@ -33,7 +33,7 @@ export default class Header extends Component {
                                         <Icon left>search</Icon>
                                     </Button>
                                 </Link>,
-                                <Link to="/saved">
+                                <Link to="/saved" key={'/saved'}>
                                     <Button
                                         className={this.props.pageLoaded === '/saved' ? 'focused' : 'white-text'}
                                         tooltip="Go to Saved Books Page"
@@ -45,7 +45,9 @@ export default class Header extends Component {
                                 <a
                                     href="https://github.com/vpvnguyen/google-books-react"
                                     target="_blank"
-                                    rel="noopener noreferrer">
+                                    rel="noopener noreferrer"
+                                    key={'github-link'}
+                                >
                                     <Button
                                         className="grey-text"
                                         tooltip="Link to Github"

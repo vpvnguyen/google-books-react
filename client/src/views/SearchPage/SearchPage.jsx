@@ -54,10 +54,9 @@ export default class SearchPage extends Component {
         });
     };
 
-    // validate google books search results
+    // validate google books search results; set placeholders if key does not exist
     validateResults = searchResults => {
         return searchResults.map((items) => {
-
             items = {
                 id: items.id,
                 title: items.volumeInfo.title,
@@ -68,8 +67,8 @@ export default class SearchPage extends Component {
                 infoLink: items.volumeInfo.infoLink ? items.volumeInfo.infoLink : 'N/A',
             }
             return items;
-        })
-    }
+        });
+    };
 
     // get google books api
     getBooks = event => {
@@ -155,16 +154,15 @@ export default class SearchPage extends Component {
                 <Animated
                     animationIn="fadeInDown"
                     animationOut="fadeOut"
-                    isVisible={this.state.isHeaderVisible}>
-
+                    isVisible={this.state.isHeaderVisible}
+                >
                     <Header
                         message={this.state.message}
                         isLoading={this.state.isLoading}
-                        pageLoaded={this.state.pageLoaded} />
-
+                        pageLoaded={this.state.pageLoaded}
+                    />
                     {/* preloader display depending on load */}
                     {this.state.isLoading ? <Preloader /> : null}
-
                 </Animated>
 
                 <Container>
@@ -183,8 +181,8 @@ export default class SearchPage extends Component {
                                             <Animated
                                                 animationIn="bounce"
                                                 animationInDelay={1000}
+                                                key={'search-box'}
                                             >
-
                                                 <Button
                                                     type='submit'
                                                     waves='light'
@@ -197,16 +195,19 @@ export default class SearchPage extends Component {
                                                 </Button>
                                             </Animated>
 
-                                        ]}>
-                                        <Animated animationIn="fadeInLeft" animationInDelay={100}>
+                                        ]}
+                                    >
 
+                                        <Animated
+                                            animationIn="fadeInLeft"
+                                            animationInDelay={100}
+                                        >
                                             {/* search field */}
                                             <TextInput
                                                 label='Type a book here...'
                                                 value={this.state.searchInput}
                                                 onChange={this.handleChange}
                                             />
-
                                         </Animated>
 
                                     </Card>
@@ -221,119 +222,121 @@ export default class SearchPage extends Component {
 
                             // map through array of objects and create cards for each book
                             this.state.searchResults.map((book, index) => (
-                                <div>
-                                    {/* each book */}
-                                    <Animated animationIn="fadeInLeftBig" animationOut="fadeOutLeftBig">
-                                        <Card
-                                            className="blue-grey darken-3"
-                                            textClassName="white-text"
-                                            key={`result-card-${book.id}`}
-                                            actions={
-                                                [
-                                                    <a
-                                                        key={`view-link-${book.id}`}
-                                                        className="view-button"
-                                                        href={book.infoLink}
-                                                        target="_blank"
-                                                        rel="noopener noreferrer"
-                                                    >
-                                                        {/* link to google books */}
-                                                        <Button
-                                                            key={`result-view-${book.id}`}
-                                                            className="view-text"
-                                                            tooltip="Link to Book"
-                                                            tooltipOptions={{ position: 'top' }}
-                                                        >
-                                                            View
-                                                                <Icon key={`icon-view-${book.id}`} left>find_in_page</Icon>
 
-                                                        </Button>
-                                                    </a>
-                                                    ,
-
-                                                    // pass dataset to API model; save book by ID
-                                                    <Button
-                                                        key={`result-save-${book.id}`}
-                                                        className="save-text"
-                                                        data-id={book.id}
-                                                        data-title={book.title}
-                                                        data-author={book.author}
-                                                        data-imglink={book.imgLink.smallThumbnail}
-                                                        data-rating={book.rating}
-                                                        data-description={book.description}
-                                                        data-infolink={book.infoLink}
-                                                        data-bookindex={index}
-                                                        tooltip="Save Book"
-                                                        tooltipOptions={{ position: 'top' }}
-                                                        onClick={this.saveBook}
-                                                    >
-                                                        Save
-                                                            <Icon key={`icon-save-${book.id}`} left>save</Icon>
-                                                    </Button >
-                                                ]
-                                            }
-                                        >
-                                            {/* display book info */}
-                                            <div className="row">
-                                                <div className="col-md-3 text-center m-auto">
-                                                    <img
-                                                        className="book-image mb-5"
-                                                        src={book.imgLink.smallThumbnail}
-                                                        alt="Book Thumbnail"
-                                                    />
-                                                </div>
-                                                <div className="col-md-9">
-                                                    <Card
-                                                        className="blue-grey darken-1"
-                                                        textClassName="white-text"
-                                                        key={`saved-card-info-${book.id}`}
-                                                    >
-                                                        <h6 className="sandybrown-text text-center">{book.title}</h6>
-                                                        <hr />
-                                                        <p className="text-center">Author: {book.author}</p>
-                                                        <p className="text-center">Rating: {book.rating ? book.rating : 'undefined'}</p>
-                                                    </Card>
-
-                                                    <Card
-                                                        className="blue-grey darken-1"
-                                                        textClassName="white-text"
-                                                        key={`saved-card-info-${book.id}`}
-                                                    >
-                                                        {book.description}
-                                                    </Card>
-
-
-                                                </div>
-                                            </div>
-                                        </Card >
-                                    </Animated>
-                                </div>
-
-                            ))
-                            :
-                            <div>
-
-                                <Animated animationIn="fadeInDown" animationOut="zoomOutUp" animationInDelay={1800}>
-
-                                    {/* change message depending on state of text area */}
+                                <Animated
+                                    animationIn="fadeInLeftBig"
+                                    animationOut="fadeOutLeftBig"
+                                >
                                     <Card
-                                        className="blue-grey darken-4"
-                                    >
-                                        <Animated
-                                            className="white-text"
-                                            animationIn="fadeInLeft"
-                                            animationInDelay={1400}
-                                            animationOut="flash"
-                                            animationOutDelay={500}
-                                            isVisible={this.state.searchInput.length > 0 ? false : true}>
-                                            {this.state.searchInput.length > 0 ?
-                                                'Press SUBMIT when ready' :
-                                                'No search results to display. Try searching for a book!'}
-                                        </Animated>
-                                    </Card>
+                                        className="blue-grey darken-3"
+                                        textClassName="white-text"
+                                        key={`result-card-${book.id}`}
+                                        actions={
+                                            [
+                                                <a
+                                                    key={`view-link-${book.id}`}
+                                                    className="view-button"
+                                                    href={book.infoLink}
+                                                    target="_blank"
+                                                    rel="noopener noreferrer"
+                                                >
+                                                    {/* link to google books */}
+                                                    <Button
+                                                        key={`result-view-${book.id}`}
+                                                        className="view-text"
+                                                        tooltip="Link to Book"
+                                                        tooltipOptions={{ position: 'top' }}
+                                                    >
+                                                        View
+                                                        <Icon key={`icon-view-${book.id}`} left>find_in_page</Icon>
 
+                                                    </Button>
+                                                </a>
+                                                ,
+
+                                                // pass dataset to API model; save book by ID
+                                                <Button
+                                                    key={`result-save-${book.id}`}
+                                                    className="save-text"
+                                                    data-id={book.id}
+                                                    data-title={book.title}
+                                                    data-author={book.author}
+                                                    data-imglink={book.imgLink.smallThumbnail}
+                                                    data-rating={book.rating}
+                                                    data-description={book.description}
+                                                    data-infolink={book.infoLink}
+                                                    data-bookindex={index}
+                                                    tooltip="Save Book"
+                                                    tooltipOptions={{ position: 'top' }}
+                                                    onClick={this.saveBook}
+                                                >
+                                                    Save
+                                                    <Icon key={`icon-save-${book.id}`} left>save</Icon>
+                                                </Button >
+                                            ]
+                                        }
+                                    >
+                                        {/* display book info */}
+                                        <div className="row">
+                                            <div className="col-md-3 text-center m-auto">
+                                                <img
+                                                    className="book-image mb-5"
+                                                    src={book.imgLink.smallThumbnail}
+                                                    alt="Book Thumbnail"
+                                                />
+                                            </div>
+                                            <div className="col-md-9">
+                                                <Card
+                                                    className="blue-grey darken-1"
+                                                    textClassName="white-text"
+                                                    key={`saved-card-header-${book.id}`}
+                                                >
+                                                    <h6 className="sandybrown-text text-center">{book.title}</h6>
+                                                    <hr />
+                                                    <p className="text-center">Author: {book.author}</p>
+                                                    <p className="text-center">Rating: {book.rating}</p>
+                                                </Card>
+
+                                                <Card
+                                                    className="blue-grey darken-1"
+                                                    textClassName="white-text"
+                                                    key={`saved-card-info-${book.id}`}
+                                                >
+                                                    {book.description}
+                                                </Card>
+
+
+                                            </div>
+                                        </div>
+                                    </Card >
                                 </Animated>
-                            </div>
+                            ))
+
+                            :
+
+                            <Animated
+                                animationIn="fadeInDown"
+                                animationOut="zoomOutUp"
+                                animationInDelay={1800}
+                            >
+
+                                {/* change message depending on state of text area */}
+                                <Card
+                                    className="blue-grey darken-4"
+                                >
+                                    <Animated
+                                        className="white-text"
+                                        animationIn="fadeInLeft"
+                                        animationInDelay={1400}
+                                        animationOut="flash"
+                                        animationOutDelay={500}
+                                        isVisible={this.state.searchInput.length > 0 ? false : true}
+                                    >
+                                        {this.state.searchInput.length > 0 ? 'Press SUBMIT when ready' : 'No search results to display. Try searching for a book!'}
+                                    </Animated>
+                                </Card>
+
+                            </Animated>
 
                     }
 
