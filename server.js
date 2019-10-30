@@ -4,6 +4,8 @@ const app = express();
 const booksController = require('./controllers/booksController.js');
 const viewRoutes = require('./routes/view.routes.js');
 
+require('dotenv').config();
+
 const PORT = process.env.PORT || 3001;
 
 // middleware
