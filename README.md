@@ -20,6 +20,9 @@ Google Books Organizer. Find and manage books using Google Books API. Create, re
 ## View saved books and delete them if needed
 ![](./demo/google-books-demo3.gif)
 
+# Deployment
+Deployed to AWS EC2 using NGINX as reverse proxy. Refer to https://github.com/vpvnguyen/nginx for AWS NGINX configuration.
+
 # Technologies
 - MongoDB
 - Express.js
