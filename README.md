@@ -1,4 +1,4 @@
-# Google Books Search! (MongoDB, Express, Node, React)
+# Google Books Search! (MongoDB, Express, Node, React, AWS EC2)
 Demo: http://ec2-3-17-130-22.us-east-2.compute.amazonaws.com/
 
 Google Books Organizer. Find and manage books using Google Books API. Create, read, and delete books.  
